@@ -1,7 +1,7 @@
-set PE_DIR=C:\pyomo\pyomoeverest
-set PYTHONPATH=%PE_DIR%
-echo %PE_DIR%
-python %PE_DIR%\pe_update_token.py -t %PE_DIR%\.token
+set PE_PATH=<path to pyomo_everest folder>
+set PYTHONPATH=%PE_PATH%
+echo %PE_PATH%
+python %PE_PATH%\pe_update_token.py -t %PE_PATH%\.token
 set PE_N_OF_SOLVED_FILE=pe.out.N_of_solved.txt
 set PE_SESSID_FILE=__pesessid.txt
 echo 0 > %PE_N_OF_SOLVED_FILE%
