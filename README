@@ -1,0 +1,7 @@
+
+1. Get a copy of Everests's Python API:
+   wget https://gitlab.com/everest/python-api/raw/master/everest.py
+
+2. Set EVEREST_LOGIN and EVEREST_PASSW in amplx_config.py
+
+3. Run ./example.sh
