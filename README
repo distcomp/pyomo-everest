@@ -2,6 +2,16 @@
 1. Get a copy of Everests's Python API:
    wget https://gitlab.com/everest/python-api/raw/master/everest.py
 
-2. Set EVEREST_LOGIN and EVEREST_PASSW in amplx_config.py
+2. Follow instruction at https://gitlab.com/everest/python-api/blob/master/README.md 
+   to install required Python secure connection packages.
 
-3. Run ./example.sh
+3. Put everest.py to the $PE_PATH/everest_api folder (replace the old everest.py)
+
+4. Add $PE_PATH to your $PATH 
+
+Now, you can run any Pyomo-Everest script by (YOU SHOULD USE python 2.7.*)
+>runPyomoEverest.sh <yourPythonProgram>
+
+E.g. go to examples/vvv64 and run
+>runPyomoEverest.sh _SvF64a_everest.py
+
