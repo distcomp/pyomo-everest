@@ -1,0 +1,283 @@
+ CVNumOfIter 1    
+ ExitStep 1e-7
+# CVpartSize 96  -2
+ StabFile                          StabSvF007
+
+GridFunc  
+  VarNormalization 
+# maxSigEst   0.0011  # Cond Ro < 1
+DataPath DATA
+
+ Func T ( Ro{-50,0,0,1}, Time{-30,0} )    ReadGrid_VSfrom   4sokolovT.txt	   CVstep   9 
+ 		Penalty [0.051878868154319857, 0.069961896776508214]
+
+# Func E(Ro{-50,0,0,1},Time{-30,0})   ReadGrid_VSfrom   4sokolovE.txt      CVstep 4 
+#		Penalty [0.001037298336039282, 0.1117897350254969]
+
+# Func  T0(Ro)   minX 0 maxX 1  stepX  -50  VisX 0        Betta1 0.154145813209  CVstep  -1  
+ #	ReadNameTblFrom   4sokolovT0.txt
+
+# Func  E0(Ro)   minX 0 maxX 1  stepX  -50  VisX 0        Betta1 0.0182691117663   CVstep  -1  
+ #          ReadNameTblFrom    4sokolovE0.txt
+
+EOF
+
+
+
+
+
+#  P	Rain	Rain2	vV	H	T	Abs_H	DateTime	 Date	Time	vDir	Bi_609	Pb_352
+ ReadNameTblFrom    ../_DATA_Rn/SAM-34-9.txt    NODATA -34
+ 
+# VarNormalization
+
+#  cond    DateTime <  39705     # sammer
+# cond    DateTime <  39679.7     # sammer beg
+# cond    Rain2 == 0
+ #  cond    Bi_609 <  6     # demo CV
+  cond    DateTime >  39686.93         cond    DateTime <  39700.21    # sammer áåç äîæäåé
+
+# nameX   DateTime   stepX    0.0104166666666667     VisX -2	maxSigEst 0.011   Betta  0.003   nameF Bi_609  nameF Pb_352  nameF Rn     DifEq2    CVNumOfIter  1 
+# addCol H   addCol T   addCol P   addCol vV   addCol Time
+
+ GridFunc1D       CVNumOfIter  1
+
+# nameX   DateTime   stepX    0.0104166666666667     VisX -2	maxSigEst 0.011   Betta  0.00443100547022    nameF Pb_352    #  no rains
+# nameX   DateTime   stepX    0.0104166666666667     VisX -2	maxSigEst 0.011   Betta  0.00427953150346    nameF Pb_352
+
+ nameX   DateTime   stepX    0.0104166666666667     VisX -2	maxSigEst 0.011   Betta  0.00133877264926    nameF Bi_609       #  no rains
+# nameX   DateTime   stepX    0.0104166666666667     VisX -2	maxSigEst 0.011   Betta  0.000545927226871    nameF Bi_609
+# nameX   DateTime   stepX    0.0104166666666667     VisX -2	maxSigEst 0.011   Betta  0.002    nameF Bi_609		# 0.5  0.02  0.05    0.08  0.0005  for fig
+
+# CVNumOfIter  0
+CVstep  15
+
+# StabFile                          StabSvF007
+
+EOF
+
+
+
+
+
+
+
+
+COND2 H LE 90
+COND2 Time LE 0.9
+COND3 Time GE 0.3
+
+
+ALPHA 0.4
+ALPHA 0.66052
+
+Y_NAME Âëàæíîñòü
+X_NAME Òåìïåðàòóðà
+Y_NAME Àá_Âëàæ
+
+
+COND1 Ñêîðîñòü_âåòðà LE 2
+COND1 sklon NE 1
+COND2 X LE 6521000
+
+# ReadNameTblFrom    ../_DATA/SRTM_Shft_100_50.xyz    Rectangle 6507750 5869050 6523250 5878850   nameF H      Betta  0.001    äëÿ øàãà100
+# ReadGridFrom   ../_DATA/Cs8_G-K-kBq.asc                      Rectangle 6507750  5869050   6523250   5878850  - nameF Csz    Betta 0.001    äëÿ øàãà100
+
+# ReadNameTblFrom    ../_DATA/SRTM_Shft_100_50.xyz    Rectangle 6507700 5869000 6523250 5878850  nameF H   Betta   0.00001   #  0.001   0.005 0.01 0.02 0.05 0.1   0.00001 - interp
+# ReadGridFrom   ../_DATA/Cs8_G-K-kBq.asc                                Rectangle 6507700 5869000 6523250 5878850  nameF Csz    Betta 0.001   # 0.0005
+
+# nameX X
+# nameY Y
+# stepX   50  stepY   50  
+# stepX 100 stepY 100  
+# stepX 25 stepY 25  
+# VisX 0 visY 0   
+# CVNumOfIter   1
+
+# WriteNameTblTo   Shft_100_50s.txt
+# WriteGridDataTo         InitData.asc
+
+
+#  X Y Csz_011 H_054 TPI_054 
+# ReadNameTblFrom    ../_DATA/04_11/JoinOut_054.txt  nameF Csz_011  nameX TPI_054  nameY H_054  stepX -100  VisX -3 stepY -100  VisY -3  Betta1 0.019  Betta2 0.0089  
+
+# X Y Csz_011 H_109 TPI_109 SL_109 ASP_109 
+# ReadNameTblFrom    ../_DATA/04_11/JoinOut_109.txt  nameF Csz_011  nameX TPI_109  nameY H_109  stepX -100  VisX -3 stepY -100  VisY -3 Betta1 0.019  Betta2 0.0089   
+# Betta1 0.0116833629482 Betta2 0.00551961659103
+# ReadNameTblFrom    ../_DATA/04_11/JoinOut_109.txt  nameF Csz_011  nameX ASP_109  nameY H_109  stepX -100  VisX -3 stepY -100  VisY -3 Betta1 0.01 Betta2 0.01
+
+# X Y Csz_011 H_194 TPI_194 TWI_194
+# ReadNameTblFrom    ../_DATA/04_11/JoinOut_194.txt  nameF Csz_011  nameX TPI_194  nameY H_194  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.019  Betta2 0.0089   
+# Betta1 0.00509567738131 Betta2 0.00508685057938
+# ReadNameTblFrom    ../_DATA/04_11/JoinOut_194.txt  nameF Csz_011  nameX TWI_194  nameY H_194  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.01 Betta2 0.01
+
+# X Y Csz_011 H_581 TPI_581
+# ReadNameTblFrom    ../_DATA/04_11/JoinOut_581.txt  nameF Csz_011  nameX TPI_581  nameY H_581  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.001 Betta2 0.002
+
+# X Y Cs H_194 TWI_194   SL_194
+# ReadNameTblFrom    ../_DATA/04_13/JoinOut_194.txt  nameF Cs  nameX TWI_194  nameY H_194  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.01 Betta2 0.01
+# ReadNameTblFrom    ../_DATA/04_13/JoinOut_194.txt  nameF Cs  nameX SL_194  nameY H_194  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.01 Betta2 0.01
+ ReadNameTblFrom    ../_DATA/04_13/JoinOut_194.txt  nameF Cs  nameX SL_194  nameY TWI_194  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.01 Betta2 0.01 # tesy jjj ooo ooo
+# X Y Cs H_342 SL_342 
+# ReadNameTblFrom    ../_DATA/04_13/JoinOut_342.txt  nameF Cs  nameX SL_342  nameY H_342  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.01 Betta2 0.005
+# X Y Cs    H_581    SL_581
+# ReadNameTblFrom    ../_DATA/04_13/JoinOut_581.txt  nameF Cs  nameX SL_581  nameY H_581  stepX -100  VisX -3 stepY -100  VisY -3   Betta1 0.01 Betta2 0.005
+# X Y Cs  H_05433 SL_05433
+# ReadNameTblFrom    ../_DATA/04_13/JoinOut_05433.txt  nameF Cs  nameX SL_05433  nameY H_05433  stepX -100  VisX -4 stepY -100  VisY -4   Betta1 0.01 Betta2 0.005
+
+ CVNumOfIter  1
+
+
+
+ StabFile                          StabSvF007
+
+# maxSigEst 100.1
+
+# Betta 0.0005
+
+CVNumOfSets  5
+
+NoData   -99999
+
+GridFunc2D
+
+EOF
+
+
+
+
+WriteNameTblTo   csz_points.txt
+
+
+VisX 0 visY 0      -  âñÿ îáëàñòü
+
+stepX 500 stepY 500  
+stepX 20 stepY 20  
+stepX 10 stepY 10  
+stepX 12.5 stepY 12.5   
+stepX 1000 stepY 1000  
+stepX 100 stepY 100  
+stepX 25 stepY 25  
+stepX 50 stepY 50  
+ 
+
+WriteNameTblTo  Wetness.txt
+ReadGridFrom     BRYA/Csz8_G-K_200.asc
+ReadGridFrom     BRYA/Csz8_G-K.asc
+
+Rectangle 6513100  5867300   6522500   5875900
+
+Rectangle 6381000  5763000   6620000   5900000  - all
+Rectangle 6381000  5763000   6501000   5833000  - 1/4
+Rectangle 6381000  5763000   6501000   5900100 -1/2 - left
+Rectangle 6501000  5763000   6620100   5900100  -1/2 - right
+
+
+NCOLS 2391
+NROWS 1371
+XLLCORNER 6381000.000000
+YLLCORNER 5763000.000000
+
+
+
+
+
+CVSetSize  156
+
+VisX 100 visY 100
+
+
+
+VERIFY_TYPE STEP SORTED_BY 0 VERIFY_STEP 100
+FILE_TYPE TBL_NAME
+ALPHA_ITER 1
+
+TOLER 1e-13
+NORMAL ON
+NORMAL OFF
+
+
+
+
+
+
+
+
+
+X_COL 1 Y_COL 2 F_COL 3 
+NCOLS 3 NROWS -9999
+
+
+
+ALPHA 499999
+
+NORMAL ON
+NORMAL OFF
+
+
+minX 6508000  minY 5864000  maxX 6536000  maxY 5892000  - áîëüøîé
+minX 6513100  minY 5867300  maxX 6522500  maxY 5875900  - ñðåäíèé
+minX 6516800  minY 5871000  maxX 6518700  maxY 5872400  - îâðàã
+
+IN_FILE srtm_tab.txt
+IN_FILE cont_srtm_gk.txt
+
+MASK_FILE msk.asc
+
+ALPHA 1e-13
+X_COL 1 Y_COL 2 F_COL 3 
+NCOLS 4 NROWS 1008
+SORTED_BY 0 - áåç ñîðòèðîâêè
+
+IN_FILE tbl007.tmp
+FILE_TYPE TLB  
+
+X_STEP 100 Y_STEP 100 
+Y_COL 2 X_COL 1 F_COL 3 
+NCOLS 3 NROWS 1015
+
+
+REGION VIS X_VIS -2 Y_VIS -2
+NCOLS 7 NROWS 2965 
+DIM 2
+Y_COL 2 X_COL 3 F_COL 4 
+NODATA -100
+X_STEP -150 Y_STEP -150 
+
+VERIFY_TYPE SET
+SORTED_BY 6
+
+REGION      VIS/ALL/AsItIs/    X_VIS -2 Y_VIS -2
+
+
+FILE_TYPE   TLB/GRID 
+
+VERIFY_TYPE STEP/SET
+VERIFY_PARTS 4
+VERIFY_STEP 100
+
+X_STEP 10 Y_STEP 0.4 
+X_STEP -50 Y_STEP -50 - êîë-âî óçëîâ ñåòêè - 1
+
+EOF
+
+ALPHA 0.025
+
+FILE_TYPE   TLB/GRID 
+
+VERIFY_TYPE STEP/SET
+VERIFY_PARTS 4
+VERIFY_STEP 100
+
+X_STEP 10 Y_STEP 0.4 
+X_STEP -50 Y_STEP -50 - êîë-âî óçëîâ ñåòêè - 1
+
+Äëÿ ÃÐÈÄÀ
+IN_FILE cs_1_1.txt
+FILE_TYPE GRID 
+
+VERIFY_TYPE STEP SORTED_BY 2 VERIFY_STEP 100
+REGION VIS X_VIS -2 Y_VIS -2
+X_STEP 50 Y_STEP 50 
+
+ALPHA 2.5e-06
