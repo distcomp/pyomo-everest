@@ -19,8 +19,7 @@ def get_token(server_uri, user, password, label):
             'username': user,
             'password': password,
             'label': label
-        }),
-        verify=False
+        })
     )
     r.raise_for_status()
     token = r.json()['access_token']
@@ -44,7 +43,6 @@ class Session:
             token = get_token(self.endpoint, user, password, app)
         self.session = requests.Session()
         self.session.headers.update({'Authorization': 'Bearer ' + token})
-        self.session.verify = False
         self.job_counter = 0
         self.submitted_jobs = []
         self.deferred_jobs = []
@@ -178,7 +176,7 @@ class Session:
             data = json.dumps(req)
         )
         debug_request(r)
-        if r.status_code == 200:
+        if r.status_code == 200 or r.status_code == 201:
             resp = r.json()
             job_id = resp['id']
             job.id = job_id
@@ -192,7 +190,6 @@ class Session:
 
     def __checkJobs(self):
         # check state of submitted jobs
-        # print ('checkJobs: ' + (job_status))
         for job in self.submitted_jobs[:]:
             if job.state == 'DONE' or job.state == 'FAILED' or job.state == 'CANCELLED':
                 self.submitted_jobs.remove(job)
@@ -200,7 +197,6 @@ class Session:
                 job_status = self.getJobStatus(job.id)
                 job_state = job_status['state']
                 if job_state == 'DONE':
-                    #~ print ('checkJobs: ' + str(job_status))
                     job._result = job_status['result']
                 if job_state != job.state:
                     print("Job " + job.id + " state: " + job_state)
