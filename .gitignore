@@ -1,0 +1,9 @@
+*.pyc
+*.token
+
+*.sol
+*.log
+*.nl
+*.txt
+
+
