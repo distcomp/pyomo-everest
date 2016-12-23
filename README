@@ -9,6 +9,11 @@
 
 4. Add $PE_PATH to your $PATH 
 
+5. Edit pe/pe_config.py 
+# Add your Everest login and password here to make token update automatically
+EVEREST_LOGIN = 'YOUR_EVEREST_USER_LOGIN'
+EVEREST_PASSW = 'YOUR_EVEREST_PASSWORD'
+
 Now, you can run any Pyomo-Everest script by (YOU SHOULD USE python 2.7.*)
 >runPyomoEverest.sh <yourPythonProgram>
 
