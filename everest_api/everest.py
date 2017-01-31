@@ -130,7 +130,7 @@ class Session:
 
     def __uploadFile(self, file):
         r = self.session.post(
-            self.endpoint + '/api/files/temp/', 
+            self.endpoint + '/api/files/temp',
             files={'file': file}
         )
         r.raise_for_status()
@@ -176,7 +176,7 @@ class Session:
             data = json.dumps(req)
         )
         debug_request(r)
-        if r.status_code == 200 or r.status_code == 201:
+        if r.status_code == 201:
             resp = r.json()
             job_id = resp['id']
             job.id = job_id
