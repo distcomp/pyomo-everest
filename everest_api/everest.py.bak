@@ -263,7 +263,7 @@ class Job:
         result = None
         if 'result' in job_json:
             result = job_json['result']
-        return cls(session, job_json['name'], job_json['appId'], job_json['inputs'],
+        return cls(session, job_json['name'], job_json['app'], job_json['inputs'],
                    None, job_json['id'], job_json['state'], result)
 
     def isReady(self):
