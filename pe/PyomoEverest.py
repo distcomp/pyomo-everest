@@ -118,15 +118,15 @@ def peSolveListOfStubs (listOfStubs, solver='ipopt', opts=PEIpoptOptionsFileName
    
 #  read N of solved solved from file
    try:
-       f_n_of_solved = open(PESessNofSolvedFileName,'r')
+       f_n_of_solved = open(sessNofSolvedFileName,'r')
        nl = f_n_of_solved.read().strip()
        N_of_solved = int(nl)
        f_n_of_solved.close()
    except IOError as e:
-       print "[%s] I/O error(%s): %s" % (PESessNofSolvedFileName, e.errno, e.strerror)
+       print "[%s] I/O error(%s): %s" % (sessNofSolvedFileName, e.errno, e.strerror)
        raise
    except ValueError:
-       print "[%s] Could not convert [%s] to an integer." % (PESessNofSolvedFileName, nl)
+       print "[%s] Could not convert [%s] to an integer." % (sessNofSolvedFileName, nl)
    except:
        print "Unexpected error:", sys.exc_info()[0]
        raise
@@ -137,7 +137,7 @@ def peSolveListOfStubs (listOfStubs, solver='ipopt', opts=PEIpoptOptionsFileName
        for p in listOfStubs:
    		problems.append(
    		   {"optionsString": "",
-               "optionsFile": open(PEIpoptOptionsFileName, 'r'),
+               "optionsFile": open(opts, 'r'),
                "solver": solver,
                "stub": open(p + '.nl', 'r')
               }
@@ -160,7 +160,7 @@ def peSolveListOfStubs (listOfStubs, solver='ipopt', opts=PEIpoptOptionsFileName
        session.close()
    
    try:
-       f_n_of_solved = open(PESessNofSolvedFileName,'w')
+       f_n_of_solved = open(sessNofSolvedFileName,'w')
        f_n_of_solved.write(str(N_of_solved))
        f_n_of_solved.close()
    except IOError as e:
