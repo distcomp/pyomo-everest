@@ -1,1 +1,11 @@
 1. Add new version based on Everest Parameter Sweep generic application
+Done
+
+2. Add submodule as a reference to current Everest python-api
+git submodule add https://gitlab.com/everest/python-api.git
+Done
+
+3. Clone DDBNB into ~/distcomp
+git clone https://github.com/distcomp/ddbnb.git
+DO IT ON ALL HOSTS
+
