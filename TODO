@@ -2,7 +2,8 @@
 Done
 
 2. Add submodule as a reference to current Everest python-api
-git submodule add https://gitlab.com/everest/python-api.git
+git submodule add https://gitlab.com/everest/python-api.git.
+See https://git-scm.com/docs/git-submodule for other commands
 Done
 
 3. Clone DDBNB into ~/distcomp
