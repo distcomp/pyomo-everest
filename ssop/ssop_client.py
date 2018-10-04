@@ -12,6 +12,7 @@ import time
 import string
 import re
 
+import ssop_config
 import requests
 import everest
 
@@ -28,20 +29,64 @@ def makeParser():
                         help='solver parameters as k=v pairs')
     parser.add_argument('-pf', '--parameters-file', action='append', default=[],
                         help='files with solver parameters. Overrides -p params')
-    parser.add_argument('-l', '--get-log', action='store_true',
+    parser.add_argument('-log', '--get-stdout', action='store_true',
+                        help='download job log')
+    parser.add_argument('-err', '--get-stderr', action='store_true',
                         help='download job log')
     parser.add_argument('-ss', '--save-status', action='store_true',
                         help='save solution status and objective value')
-    parser.add_argument('-sm', '--stop-mode', type=int, default='0',
-                        help='0 - run until all tasks finish, 1 - run until any task finish, return best solution as result')
-    parser.add_argument('-ii', '--initial-incumbent', type=float, default='1e23',
-                        help='start task with initial incumbent')
     parser.add_argument('-i', '--input', type=argparse.FileType('rb'),
                         help='file with a list of input NL-files')
     parser.add_argument('-o', '--out-prefix', default='out', help='output prefix')
     parser.add_argument('-ur', '--use-results', help='Skip parameter sweep run by using already computed results')
     parser.add_argument('file', nargs='*', default=[], help='input NL-files')
     return parser
+
+
+
+def getDD_MM_YY_HH_MM():
+    return time.strftime("%d-%m-%Y-%H:%M", time.gmtime())
+
+def update_token():
+    tokenName = ssop_config.SSOP_TOKEN_FILE
+
+    tokenGotTime = 0
+    if os.path.isfile(tokenName):
+        tokenGotTime = os.stat(tokenName).st_ctime
+
+    if tokenGotTime + ssop_config.UPDATE_TOKEN_PERIOD_IN_SEC >= time.time():
+        print "Token <" + tokenName + "> is still valid"
+        return
+        # sys.exit(0)
+    manualLogin = False
+    if isinstance(ssop_config.EVEREST_LOGIN, str):
+        if len(ssop_config.EVEREST_LOGIN) == 0:
+            manualLogin = True
+    if not isinstance(ssop_config.EVEREST_LOGIN, str):
+        manualLogin = True
+
+    if not manualLogin:
+        token = everest.get_token('https://everest.distcomp.org',
+                          ssop_config.EVEREST_LOGIN,
+                          ssop_config.EVEREST_PASSW,
+                          'ssop_' + getDD_MM_YY_HH_MM())
+    else:
+        import getpass
+        login = raw_input('Your Everest login: ')
+        pw = getpass.getpass('Your Everest password: ')
+        token = everest.get_token('https://everest.distcomp.org',
+                          login,
+                          pw,
+                          'ssop_' + getDD_MM_YY_HH_MM())
+
+
+    with open(tokenName, 'w') as f:
+        f.write(token)
+    print "Token <" + tokenName + "> has been updated"
+
+
+def mainTest():
+    update_token()
 
 def main0():
     tmpDir = tempfile.mkdtemp()
@@ -313,15 +358,15 @@ def saveResults(jobResults, stubNames, args):
                 outName, best['status'], info['taskNum'], best['val'])
             z.writestr(outName, best['sol'])
 
-    vals = [v['val'] for v in jobs.values() if 'val' in v]
-    if args.save_status and vals:
+    incumbentNoSol = min([v['val'] for v in jobs.values() if 'val' in v])
+    if args.save_status:
         with open(args.out_prefix + '-incumbent-no-sol.txt', 'w') as f:
-            f.write('%g' % min(vals))
+            f.write('%g' % incumbentNoSol)
 
     withSol = [i for i in infos if i['has_solution']]
     if not withSol:
         print 'No solutions in job results'
-        return jobs
+        return
     best = min(withSol, key=lambda v: v['incumbent'])
     print 'Best incumbent %f found for %s' % (best['incumbent'], best['stub'])
 
@@ -338,4 +383,5 @@ def saveResults(jobResults, stubNames, args):
     return jobs
 
 if __name__ == "__main__":
-    main0()
+    # main0()
+    mainTest()
