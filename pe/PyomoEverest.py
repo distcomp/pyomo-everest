@@ -100,7 +100,7 @@ def makeStab_solve(stab_file, Gr, nls, nlEND, p_1_NoR, NoR, symbol_map):
     return results
 
 
-def peSolveListOfStubs(listOfStubs, solver='ipopt', opts=None, sessNofSolvedFileName=PESessNofSolvedFileName, optsasstring=''):
+def peSolveListOfStubs(listOfStubs, solver='ipopt', delJobs=True, opts=None, sessNofSolvedFileName=PESessNofSolvedFileName, optsasstring=''):
     tokenFile = '.token'
     if 'PE_PATH' in os.environ:
         tokenFile = os.path.join(os.environ['PE_PATH'], '.token')
@@ -168,6 +168,11 @@ def peSolveListOfStubs(listOfStubs, solver='ipopt', opts=None, sessNofSolvedFile
             session.getFile(result['solution'], pName + '.sol')
             session.getFile(result['solve-ampl-stub-log'], pName + '.log')
             N_of_solved = N_of_solved + 1
+
+        if delJobs:
+            for j in jobs:
+                j.delete()
+
     except everest.JobException as e:
         print (" runAll caused: " + e)
         raise
