@@ -1,0 +1,6 @@
+parameter nlname tmpabc0007_00000 tmpabc0007_00001 tmpabc0007_00002 tmpabc0007_00003 tmpabc0007_00000 tmpabc0007_00001 tmpabc0007_00002 tmpabc0007_00003
+parameter options peipopt.opt
+parameter solver ipopt
+input_files ${nlname}.nl ${options}
+command run-${solver}.sh ${nlname} ${options}
+output_files ${nlname}.sol ${nlname}.log.txt stderr

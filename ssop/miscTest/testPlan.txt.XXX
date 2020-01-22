@@ -1,0 +1,6 @@
+parameter nlnames tmpabc0007_00000 tmpabc0007_00001 tmpabc0007_00002 tmpabc0007_00003
+parameter options peipopt.opt
+parameter solver ipopt
+input_files ${nlnames}.nl ${options} run-${solver}.sh
+command bash /home/vladimirv/mc2/agent/ssop/run-${solver}.sh ${nlnames}.nl ${options}
+output_files ${nlnames}.sol stderr stdout
