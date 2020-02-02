@@ -22,7 +22,7 @@ def makeParser():
                         help='token obtainable with everest.py')
     parser.add_argument('-r', '--resources', nargs='+', default=[],
                         help='everest resources to be used')
-    parser.add_argument('-s', '--solver', default='scip', choices=['scip', 'cbc', 'scip_bundle'],
+    parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'fscip'],
                         help='solver to use')
     parser.add_argument('-p', '--parameters', default=[], nargs='+',
                         help='solver parameters as k=v pairs')
