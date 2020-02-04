@@ -23,8 +23,6 @@ SSOP_ID = "vladimirv/solve-set-opt-probs" #"5bb2783e420000772e1049fd"
 # Add your Everest login and password here to make token update automatically
 SSOP_TOKEN_FILE = "/home/vladimirv/mc2/python-api/.token-optmod" #"/home/vladimirv/python_work/pyomo-everest/ssop/.token" #" "C:\\_SvF\\TMP\\.token"
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
-EVEREST_LOGIN = "vladimirv" #"sokol"  #"YOUR_EVEREST_USER_LOGIN"
-EVEREST_PASSW = "mathcloud2517" #"luba1985"  #"YOUR_EVEREST_PASSWORD"
 
 # Working dirs
 SSOP_DEFAULT_WORKING_DIR = "/home/vladimirv/python_work/pyomo-everest/ssop/.tmp"
