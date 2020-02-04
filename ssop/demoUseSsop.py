@@ -55,33 +55,12 @@ def makeParser():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-pr', '--problem', default="maxVofCube", help='problem name')
     parser.add_argument('-wd', '--workdir', default='/home/vladimirv/python_work/pyomo-everest/ssop/.demo', help='working directory')
+    parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'],
+                        help='solver to use')
     return parser
 
-if __name__ == "__main__":
-    parser = makeParser()
-    args = parser.parse_args()
-    # vargs = vars(args)
-    for arg in vars(args):
-        print arg, getattr(args, arg)
-
-    workdir = args.workdir
-
-    bCube = binaryHypercube(3, type="-11")
-    nlNames = []
-    dictModels = {}
-    for b in bCube:
-        s = "%d%d%d" % (b[0],b[1],b[2])
-        probName = args.problem + '_' + s
-        print("Make NL for ", probName)
-
-        theModel = TestProblem(name=probName, shiftSigns=b)
-
-        dictModels[probName] = theModel
-        nlName = write_nl_only(theModel.model, workdir + '/' + probName,  symbolic_solver_labels=False)
-        nlNames.append(probName)
-
-    # Write options file
-    optFile = 'ipopt.opt'
+def makeIpoptOptionsFile(workdir, optFileName):
+    # see https://coin-or.github.io/Ipopt/OPTIONS.html
     with open(workdir + "/" + optFile, 'wb') as f:
         f.write('linear_solver ma57\n')
         f.write('max_iter 10000\n'     )
@@ -91,16 +70,41 @@ if __name__ == "__main__":
         f.write('print_level 4\n')
         f.write('print_user_options yes\n')
         f.close()
+    return
 
-    # Solve all problems
-    theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvoldell"]], \
-                             workdir=workdir, debug=False)
-    solved, unsolved, jobId = theSession.runJob(nlNames, "ipopt.opt")
-    print("solved:   ", solved)
-    print("unsolved: ", unsolved)
-    print("Job %s is finished" % (jobId))
+def makeScipOptionsFile(workdir, optFileName):
+    # https://scip.zib.de/doc-6.0.2/html/PARAMETERS.php
+    with open(workdir + "/" + optFile, 'wb') as f:
+        f.write('display/freq = 100\n')
+        f.write('display/verblevel = 4\n')
+        f.write('limits/gap = 1e-06\n')
+        f.write('limits/memory = 28000\n')
+        f.close()
+    return
 
-    # Check results
+def makeNlFiles(workdir, **params):
+    problem = params["problem"]
+    bCube = params["bCube"]
+    # workdir = params["workdir"]
+    shiftDelta = params["shiftDelta"]
+
+    nlNames = []
+    dictModels = {}
+
+    for b in bCube:
+        s = "%d%d%d" % (b[0],b[1],b[2])
+        probName = problem + '_' + s
+        print("Make NL for ", probName)
+
+        theModel = TestProblem(name=probName, shiftSigns=b, shiftDelta=shiftDelta)
+
+        dictModels[probName] = theModel
+        nlName = write_nl_only(theModel.model, workdir + '/' + probName,  symbolic_solver_labels=False)
+        nlNames.append(probName)
+
+    return nlNames, dictModels
+
+def checkResults(workdir, solvedNlNames, dictModels):
     for nlname in solved:
         theModel = dictModels[nlname]
         # the trick with fast reading: smap is generated for read only!
@@ -116,6 +120,49 @@ if __name__ == "__main__":
             idxBuf = idxBuf + ("x%d " % idx)
 
         print("[%s] = [%s]" % (idxBuf, valBuf))
+
+    return
+
+if __name__ == "__main__":
+    parser = makeParser()
+    args = parser.parse_args()
+    # vargs = vars(args)
+    for arg in vars(args):
+        print arg, getattr(args, arg)
+
+    workdir = args.workdir
+    solver = args.solver
+
+    bCube = binaryHypercube(3, type="-11")
+
+    theSession = SsopSession(name=args.problem + "-" + solver, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvoldell"]], \
+                             workdir=workdir, debug=False)
+
+    # Write NL-files
+    shiftDelta = 0.15
+    print("shiftDelta=%4.2f" % (shiftDelta))
+    nlNames, dictModels = makeNlFiles(workdir, problem=args.problem, bCube=bCube, shiftDelta=shiftDelta)
+
+    # Write options file
+    if solver == "scip":
+        optFile = 'scipdemo.set'
+        makeScipOptionsFile(workdir, optFile)
+    if solver == "ipopt":
+        optFile = 'ipopt.opt'
+        makeIpoptOptionsFile(workdir, optFile)
+
+    # Solve all problems by SSOP
+    if solver == "ipopt":
+        solved, unsolved, jobId = theSession.runJob(nlNames, optFile) # by default solver = "ipopt"
+    if solver == "scip":
+        solved, unsolved, jobId = theSession.runJob(nlNames, optFile, solver="scip")
+
+    print("solved:   ", solved)
+    print("unsolved: ", unsolved)
+    print("Job %s is finished" % (jobId))
+
+    # Check results
+    checkResults(workdir, solved, dictModels)
 
     # ===============================================================
     # || Change the set of models: increase shift of cube vertices ||
@@ -125,46 +172,30 @@ if __name__ == "__main__":
     print("===============================================================")
     # print("========== Next set of problems ... ==========")
     shiftDelta = 0.2
-    print("The shiftDelta = %f" % (shiftDelta))
-    nlNames = []
-    dictModels = {}
-    for b in bCube:
-        s = "%d%d%d" % (b[0],b[1],b[2])
-        probName = args.problem + '_' + s
-        print("Make NL for ", probName)
-
-        theModel = TestProblem(name=probName, shiftSigns=b, shiftDelta=shiftDelta)
-
-        dictModels[probName] = theModel
-        nlName = write_nl_only(theModel.model, workdir + '/' + probName,  symbolic_solver_labels=False)
-        nlNames.append(probName)
+    print("The shiftDelta = %4.2f" % (shiftDelta))
+    nlNames, dictModels = makeNlFiles(workdir, problem=args.problem, bCube=bCube, shiftDelta=shiftDelta)
 
     # Solve all problems by the SAME SESSION !
 
-    solved, unsolved, jobId = theSession.runJob(nlNames, "ipopt.opt")
+    if solver == "ipopt":
+        solved, unsolved, jobId = theSession.runJob(nlNames, optFile) # by default solver = "ipopt"
+    if solver == "scip":
+        solved, unsolved, jobId = theSession.runJob(nlNames, optFile, solver="scip")
+
     print("solved:   ", solved)
     print("unsolved: ", unsolved)
     print("Job %s is finished" % (jobId))
 
     # Check results
-    for nlname in solved:
-        theModel = dictModels[nlname]
-        # the trick with fast reading: smap is generated for read only!
-        smap = get_smap_var(theModel.model)
-        results = read_sol_smap_var(theModel.model, workdir + "/" + nlname, smap)
-        theModel.model.solutions.load_from(results)
-        # solution have been loaded to the model
-        print("Solutions for ", nlname.split("_")[-1])
-        valBuf = ""
-        idxBuf = ""
-        for idx in theModel.model.idx:
-            valBuf = valBuf + ("%5.2f " % theModel.model.x[idx]())
-            idxBuf = idxBuf + ("x%d " % idx)
+    checkResults(workdir, solved, dictModels)
 
-        print("[%s] = [%s]" % (idxBuf, valBuf))
+    # Clean working directory to free disk space at local host, MAY BE
+    theSession.deleteWorkFiles([".nl", ".sol", ".zip", ".plan"])
 
-    # CLOSE THE SESSION !!!
-    theSession.deleteAllJobs()
+    # Delete jobs created to save disk space at Everest server , MAY BE
+    # theSession.deleteAllJobs()
+
+    # CLOSE THE SESSION !!! MUST BE
     theSession.session.close()
 
     print("Done")

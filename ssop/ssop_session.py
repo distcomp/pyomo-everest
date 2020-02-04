@@ -96,7 +96,7 @@ class SsopSession:
         :param nlNmes: list of NL-files without .nl extension, should be placed in the workdir
         :param optFile: file with solver options, should be placed in the workdir
         :param solver: {ipopt|scip|...}
-        :return: number of SOL-files placed in workdir
+        :return: list of solved problems, list of unsolved, JobId
         """
         nlFIles2str = "".join(nlNames[i]+" " for i in range(len(nlNames)))
 
@@ -135,7 +135,7 @@ class SsopSession:
 
         self.nJobs = self.nJobs + 1
 
-        print("Job" + jobName + ", " + jobId + " is running")
+        print("Job " + jobName + ", " + jobId + " is running")
 
         try:
             result = job.result()
@@ -180,6 +180,14 @@ class SsopSession:
     def deleteAllJobs(self):
         for jid in self.listJobsId:
             self.session.deleteJob(jid)
+        return
+
+    def deleteWorkFiles(self, patterns):
+        files = os.listdir(self.workdir)
+        for f in files:
+            for p in patterns:
+                if p in f:
+                    os.remove(os.path.join(self.workdir, f))
         return
 
 if __name__ == "__main__":
