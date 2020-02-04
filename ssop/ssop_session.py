@@ -59,6 +59,7 @@ class SsopSession:
         self.workdir = workdir
         self.resources = resources
         self.nJobs = 0
+        self.listJobsId = []
         self.nProblems = 0
         self.debug = debug
 
@@ -66,8 +67,28 @@ class SsopSession:
     def makeFileName(self, fname, suffix=""):
         return os.path.join(self.workdir, fname + suffix)
 
-    def saveResults(selfself, resZipName, nlNames):
-        return
+    def saveResults(self, zipFilePath, nlNames):
+        solList = []
+        errList = []
+        with ZipFile(zipFilePath, 'r') as z:
+            infoList = z.infolist()
+            # print("infoList : ", infoList)
+            for finfo in infoList:
+                if '.sol' in finfo.filename:
+                    finfo.filename = os.path.basename(finfo.filename)
+                    z.extract(finfo, self.workdir)
+                    solList.append(os.path.splitext(finfo.filename)[0])
+            # check whether all SOL are here
+            for nln in nlNames:
+                if nln in solList:
+                    continue
+                # extract log and err
+                errList.append(nln)
+                for finfo in infoList:
+                    if (nln + ".err.txt" in finfo.filename) or (nln + ".log.txt" in finfo.filename):
+                        finfo.filename = os.path.basename(finfo.filename)
+                        z.extract(finfo, self.workdir)
+        return solList, errList
 
     def runJob(self, nlNames, optFile, solver="ipopt"):
         """
@@ -85,7 +106,7 @@ class SsopSession:
             f.write('parameter solver %s \n' % (solver))
             f.write('input_files ${nlname}.nl ${options}\n')
             f.write('command run-%s.sh ${nlname} ${options}\n' % (solver))
-            f.write('output_files ${nlname}.sol ${nlname}.log.txt stderr\n')
+            f.write('output_files ${nlname}.sol ${nlname}.log.txt ${nlname}.err.txt stderr\n')
             f.close()
 
         with ZipFile(self.makeFileName(self.name, '.zip'), 'w', ZIP_DEFLATED) as z:
@@ -111,7 +132,9 @@ class SsopSession:
             print("Job[" + jobName + "] caused:" + e.message)
             self.session.close()
             return
+
         self.nJobs = self.nJobs + 1
+
         print("Job" + jobName + ", " + jobId + " is running")
 
         try:
@@ -121,13 +144,14 @@ class SsopSession:
             if 'result' in result:
                 print 'Job failed, result downloaded'
                 self.session.getFile(result['result']['results'], self.makeFileName(jobName + '-results.zip'))
-                self.saveResults(self.makeFileName(jobName + '-results.zip'), nlNames)
+                solved, unsolved = self.saveResults(self.makeFileName(jobName + '-results.zip'), nlNames)
                 if self.debug:
                     print "Downloading job's log..."
                     self.session.getJobLog(job.id, jobName + '.log')
             else:
                 print 'Job failed, no result available'
-            sys.exit(1)
+            self.listJobsId.append(jobId)
+            return solved, unsolved, jobId
         except KeyboardInterrupt:
             print 'Cancelling the job...'
             try:
@@ -140,16 +164,22 @@ class SsopSession:
                 result = job.result()
             except everest.JobException as e:
                 print e
-            return
+            return None, None, job.id
 
         self.session.getFile(result['results'], self.makeFileName(jobName + '-results.zip'))
-        self.saveResults(self.makeFileName(jobName + '-results.zip'), nlNames)
+        solved, unsolved = self.saveResults(self.makeFileName(jobName + '-results.zip'), nlNames)
         # tasksRes = saveResults(makeName('-results.zip'), stubNames, args)
         if self.debug:
             print "Downloading job's log..."
             self.session.getJobLog(job.id, args.out_prefix + '.log')
             # parseJobLog(args.out_prefix + '.log', tasksRes, args)
 
+        self.listJobsId.append(jobId)
+        return solved, unsolved, jobId
+
+    def deleteAllJobs(self):
+        for jid in self.listJobsId:
+            self.session.deleteJob(jid)
         return
 
 if __name__ == "__main__":
@@ -162,7 +192,9 @@ if __name__ == "__main__":
 
     theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"]], debug=args.debug)
 
-    theSession.runJob(["tmpabc0007_00000", "tmpabc0007_00001", "tmpabc0007_00002", "tmpabc0007_00003"], "peipopt.opt")
+    solved, unsolved = theSession.runJob(["tmpabc0007_00000", "tmpabc0007_00001", "tmpabc0007_00002", "tmpabc0007_00003"], "peipopt.opt")
+    print("solved:   ", solved)
+    print("unsolved: ", unsolved)
 
     theSession.session.close()
 
