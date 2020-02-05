@@ -9,8 +9,9 @@ SSOP_RESOURCES = {"vvvolhome"      : "5d167bbf1200008937f93ff9", \
                   "vvvolhome2"     : "5e33cf6211000075006a321f", \
                   "vvvoldell"      : "5c5b0d9c410000a25e4c9b99", \
                   "ui4.kiae.vvvol" : "5addfc3115000084cb623517", \
-                  "ui4.kiae"       : "59c520773300004852f4363a", \
-                  "govorun"        : "5d44926b0f0000b553cd4172"}
+                  # "ui4.kiae"       : "59c520773300004852f4363a", \
+                  # "govorun"        : "5d44926b0f0000b553cd4172" \
+                  }
                   # 'irbis1':'52eb8d4e420000f401166a2e', \
                   # 'fujiRestOpt'    :'578ea88d310000b33c8c7f44', \
                   # 'restopt-vm1'    :'544e54293300003f0038c674', \
