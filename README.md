@@ -1,4 +1,4 @@
-pyomo-everest project 
+Pyomo-Everest project 
 =======================
 
 It is a tool to support optimization modelling with the aid of Everest optimization services https://optmod.distcomp.org and 
