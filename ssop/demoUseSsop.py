@@ -57,8 +57,7 @@ def makeParser():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-pr', '--problem', default="maxVofCube", help='problem name')
     parser.add_argument('-wd', '--workdir', default='/home/vladimirv/python_work/pyomo-everest/ssop/.demo', help='working directory')
-    parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'],
-                        help='solver to use')
+    parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'], help='solver to use')
     parser.add_argument('-cf', '--cleanfiles', action='store_true', help='clean working directory')
     parser.add_argument('-cj', '--cleanjobs', action='store_true', help='clean jobs from server')
     parser.add_argument('-x', '--extra', action='store_true', help='extra tests')
