@@ -12,16 +12,18 @@ Each service, an Everest-application in Everest-terminology, is a front-end of a
 deployed and running on a number of various computing resources 
 (desktops, standalone servers, clusters). 
 This computing environment is extensible because the potential users can add their own computing resources to the 
-optimization environment via the open source Everest agent, https://gitlab.com/everest/agent. On the other hand, user can call 
+optimization environment via the open source Everest agent, https://gitlab.com/everest/agent. 
+On the other hand, user can call 
 these services fron their applications via Everest Python API, https://gitlab.com/everest/python-api.
 
 Now there are two basic services, which may be used for solve the set of mathematical programming problems in parallel:
 1) https://optmod.distcomp.org/apps/vladimirv/solve-ampl-stub, Smirnov S., Voloshinov V., Sukhosroslov O. [Distributed Optimization on the Base of AMPL Modeling Language and Everest Platform](http://dx.doi.org/10.1016/j.procs.2016.11.037) // Procedia Computer Science, Vol. 101, 2016, pp. 313–322
 2) https://optmod.distcomp.org/apps/vladimirv/solve-set-opt-probs, so called SSOP application. 
 
-The 1st service looks a bit obsolete know due to extra load of Everest-server, because every problem "spawns" separate Everest Job (see Everest manuals for details).
+The 1st service looks a bit obsolete know due to extra load of Everest-server, 
+because every problem "spawns" separate Everest Job (see Everest manuals for details).
 
-The 2nd service inherits efficiency of generic Parameter Sweep Everest application (PS), http://everest.distcomp.org/docs/ps/.
+The 2nd service inherits efficiency of generic Parameter Sweep Everest application, http://everest.distcomp.org/docs/ps/.
 A set of problems is processed in a single Job, each in a separate subtask. In addition PS provides a number of useful features:
 flexible modification of data processing script via PLAN-file; input and outputs data in ZIP-files, which save Internet traffic; 
 simple way to involve additional computing resources, including clusters and supercomputers. 
@@ -30,6 +32,7 @@ Due to the above reasons, it is strongly recommended to use SSOP in your researc
 Installation and use of SSOP
 --------------- 
 It is assumed that you are a registered Everest user and a member of the **@optMod** users group (see https://optmod.distcomp.org/about)
+
 1) Get a copy of Everests's Python API (it is Python 2.7, 3.7 compatible):
 
    `wget https://gitlab.com/everest/python-api/raw/master/everest.py`
@@ -66,23 +69,22 @@ see the end of **demoUseSsop.py**)
 
 **2)** a couple of auxiliary modules from **asl_io** folder 
 (actually, it is a modified content of https://github.com/Pyomo/PyomoGallery/tree/master/asl_io)
-* **write.py** - a number of basic functions to create NL-files from Pyomo models (including "fast" NL-file writing, 
+* **write.py** - a number of basic functions to create AMPL NL-files from Pyomo models (including "fast" NL-file writing, 
 without SMAP-file creation)
 * **read.py** - a number of basic function to read results of optimization in the form of AMPL SOL-file 
 (with SMAP-creation in memory to load results in the model). See examples of usage in **demoUseSsop.py** 
 (**makeNlFiles** and **checkResults** functions).
 
   
-The rest of instruction concers obsolete pyomo-everest features
-----------------------------------
+## The rest of instruction concers obsolete pyomo-everest features ##
 1. Put everest.py to the $PE_PATH/everest_api folder (replace the old everest.py)
 
 2. Add $PE_PATH to your $PATH 
 
 3. Edit pe/pe_config.py 
 
-Add your Everest login and password here to make token update automatically
--------------------------------------------------------------
+#### Add your Everest login and password here to make token update automatically ####
+
 EVEREST_LOGIN = 'YOUR_EVEREST_USER_LOGIN'
 
 EVEREST_PASSW = 'YOUR_EVEREST_PASSWORD'
