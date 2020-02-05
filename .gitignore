@@ -7,3 +7,12 @@
 *.txt
 
 
+/python-api/
+/ssop/ssop_config.py.bak
+/pe/everest.py.XXX
+/pe/ssop_config.py.back
+/examples/
+/ssop/miscTest/testPlan.txt.XXX
+/ssop/miscTest/testPlan-8.txt.XXX
+/ssop/miscTest/testPlanApps.txt.XXX
+/ssop/miscTest/
