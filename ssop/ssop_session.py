@@ -1,15 +1,18 @@
+from __future__ import print_function
+# from future.utils import iteritems
+
 import os
 import sys
 import argparse
 from zipfile import ZipFile, ZIP_DEFLATED
-import shutil
-import tempfile
-from collections import defaultdict, OrderedDict
-import json
-import calendar
-import time
-import string
-import re
+# import shutil
+# import tempfile
+# from collections import defaultdict, OrderedDict
+# import json
+# import calendar
+# import time
+# import string
+# import re
 
 import requests
 import everest
@@ -100,7 +103,7 @@ class SsopSession:
         """
         nlFIles2str = "".join(nlNames[i]+" " for i in range(len(nlNames)))
 
-        with open(self.makeFileName(self.name, '.plan'), 'wb') as f:
+        with open(self.makeFileName(self.name, '.plan'), 'w') as f:
             f.write('parameter nlname %s\n' % (nlFIles2str))
             f.write('parameter options %s \n' % (optFile))
             f.write('parameter solver %s \n' % (solver))
@@ -115,8 +118,10 @@ class SsopSession:
             z.write(self.makeFileName(optFile), arcname=optFile)
             z.close()
 
-        jobName = self.name + "-" + str(self.nJobs+1)
+        jobName = self.name + "-" + solver + "-" + str(self.nJobs+1)
         jobId = ""
+        solved = []
+        unsolved = []
         if self.debug:
             print("plan: %s" % (self.makeFileName(self.name, '.plan')))
             print("files: %s" % (self.makeFileName(self.name, '.zip')))
@@ -129,7 +134,7 @@ class SsopSession:
             jobId = job.id
             # print("JobId" + jobId)
         except Exception as e:
-            print("Job[" + jobName + "] caused:" + e.message)
+            print("Job[" + jobName + "] caused: ", e)
             self.session.close()
             return
 
@@ -142,18 +147,18 @@ class SsopSession:
         except everest.JobException:
             result = self.session.getJobStatus(job.id)
             if 'result' in result:
-                print 'Job failed, result downloaded'
+                print('Job failed, result downloaded')
                 self.session.getFile(result['result']['results'], self.makeFileName(jobName + '-results.zip'))
                 solved, unsolved = self.saveResults(self.makeFileName(jobName + '-results.zip'), nlNames)
                 if self.debug:
-                    print "Downloading job's log..."
+                    print("Downloading job's log...")
                     self.session.getJobLog(job.id, jobName + '.log')
             else:
-                print 'Job failed, no result available'
+                print('Job failed, no result available')
             self.listJobsId.append(jobId)
             return solved, unsolved, jobId
         except KeyboardInterrupt:
-            print 'Cancelling the job...'
+            print('Cancelling the job...')
             try:
                 job.cancel()
             except requests.exceptions.HTTPError as e:
@@ -163,14 +168,14 @@ class SsopSession:
             try:
                 result = job.result()
             except everest.JobException as e:
-                print e
-            return None, None, job.id
+                print(e)
+            return (None, None, job.id)
 
         self.session.getFile(result['results'], self.makeFileName(jobName + '-results.zip'))
         solved, unsolved = self.saveResults(self.makeFileName(jobName + '-results.zip'), nlNames)
         # tasksRes = saveResults(makeName('-results.zip'), stubNames, args)
         if self.debug:
-            print "Downloading job's log..."
+            print("Downloading job's log...")
             self.session.getJobLog(job.id, args.out_prefix + '.log')
             # parseJobLog(args.out_prefix + '.log', tasksRes, args)
 
@@ -196,7 +201,7 @@ if __name__ == "__main__":
     # print(args)
     vargs = vars(args)
     for arg in vars(args):
-        print arg, getattr(args, arg)
+        print(arg, getattr(args, arg))
 
     theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"]], debug=args.debug)
 

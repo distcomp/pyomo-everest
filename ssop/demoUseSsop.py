@@ -1,3 +1,6 @@
+from __future__ import print_function
+from future.utils import iteritems
+
 import os
 import sys
 import argparse
@@ -19,7 +22,7 @@ from write import get_smap_var
 
 from read import read_sol_smap_var
 
-import ssop_config
+# import ssop_config
 from ssop_session import *
 
 import ssop_config
@@ -31,7 +34,7 @@ def binaryHypercube(N, UpN = 15, type="01"):
     if not type in ["01", "-11"]:
         raise ValueError('Unknown type = ' + type + ' Not in ["01", "-11"]')
 
-    print 'Hypercube N = ', N
+    print('Hypercube N = ', N)
     s = '{:0' + str(N) + 'b}'
     res = []
     for n in range(0, 2 ** N):
@@ -57,24 +60,27 @@ def makeParser():
     parser.add_argument('-wd', '--workdir', default='/home/vladimirv/python_work/pyomo-everest/ssop/.demo', help='working directory')
     parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'],
                         help='solver to use')
+    parser.add_argument('-cf', '--cleanfiles', action='store_true', help='clean working directory')
+    parser.add_argument('-cj', '--cleanjobs', action='store_true', help='clean jobs from server')
+    parser.add_argument('-x', '--extra', action='store_true', help='extra tests')
     return parser
 
 def makeIpoptOptionsFile(workdir, optFileName):
     # see https://coin-or.github.io/Ipopt/OPTIONS.html
-    with open(workdir + "/" + optFile, 'wb') as f:
-        f.write('linear_solver ma57\n')
-        f.write('max_iter 10000\n'     )
-        f.write('constr_viol_tol 0.0001\n')
-        f.write('warm_start_init_point yes\n')
-        f.write('warm_start_bound_push 1e-06\n')
-        f.write('print_level 4\n')
-        f.write('print_user_options yes\n')
+    with open(workdir + "/" + optFile, 'w') as f:
+        f.write("linear_solver ma57\n")
+        f.write("max_iter 10000\n")
+        f.write("constr_viol_tol 0.0001\n")
+        f.write("warm_start_init_point yes\n")
+        f.write("warm_start_bound_push 1e-06\n")
+        f.write("print_level 4\n")
+        f.write("print_user_options yes\n")
         f.close()
     return
 
 def makeScipOptionsFile(workdir, optFileName):
     # https://scip.zib.de/doc-6.0.2/html/PARAMETERS.php
-    with open(workdir + "/" + optFile, 'wb') as f:
+    with open(workdir + "/" + optFile, 'w') as f:
         f.write('display/freq = 100\n')
         f.write('display/verblevel = 4\n')
         f.write('limits/gap = 1e-06\n')
@@ -105,7 +111,7 @@ def makeNlFiles(workdir, **params):
     return nlNames, dictModels
 
 def checkResults(workdir, solvedNlNames, dictModels):
-    for nlname in solved:
+    for nlname in solvedNlNames:
         theModel = dictModels[nlname]
         # the trick with fast reading: smap is generated for read only!
         smap = get_smap_var(theModel.model)
@@ -127,16 +133,24 @@ if __name__ == "__main__":
     parser = makeParser()
     args = parser.parse_args()
     # vargs = vars(args)
+    print('Arguments of the test')
+    print('======================')
     for arg in vars(args):
-        print arg, getattr(args, arg)
+        print(arg + ":", getattr(args, arg))
+    print('======================')
 
     workdir = args.workdir
     solver = args.solver
 
     bCube = binaryHypercube(3, type="-11")
 
-    theSession = SsopSession(name=args.problem + "-" + solver, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvoldell"]], \
+    theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvoldell"]], \
                              workdir=workdir, debug=False)
+    # Variables declarations for Python 3.*
+    optFile = ""
+    solved = []
+    unsolved = []
+    jobId = ""
 
     # Write NL-files
     shiftDelta = 0.15
@@ -189,11 +203,31 @@ if __name__ == "__main__":
     # Check results
     checkResults(workdir, solved, dictModels)
 
+    # Call different solvers as extra tests
+    if args.extra:
+        print('=====================================\nTry successive calls: SCIP and IPOPT')
+        shiftDelta = 0.3
+        print("The shiftDelta = %4.2f" % (shiftDelta))
+        nlNames, dictModels = makeNlFiles(workdir, problem=args.problem, bCube=bCube, shiftDelta=shiftDelta)
+
+        # !!! If you change solver DO NOT FORGET to select another options file !!!
+        optFile = 'scipdemo.set'
+        makeScipOptionsFile(workdir, optFile)
+        solved, unsolved, jobId = theSession.runJob(nlNames, optFile, solver="scip")
+        checkResults(workdir, solved, dictModels)
+
+        optFile = 'ipopt.opt'
+        makeIpoptOptionsFile(workdir, optFile)
+        solved, unsolved, jobId = theSession.runJob(nlNames, optFile, solver="ipopt")
+        checkResults(workdir, solved, dictModels)
+
     # Clean working directory to free disk space at local host, MAY BE
-    theSession.deleteWorkFiles([".nl", ".sol", ".zip", ".plan"])
+    if args.cleanfiles:
+        theSession.deleteWorkFiles([".nl", ".sol", ".zip", ".plan"])
 
     # Delete jobs created to save disk space at Everest server , MAY BE
-    # theSession.deleteAllJobs()
+    if args.cleanjobs:
+        theSession.deleteAllJobs()
 
     # CLOSE THE SESSION !!! MUST BE
     theSession.session.close()
