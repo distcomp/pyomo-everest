@@ -51,8 +51,6 @@ def binaryHypercube(N, UpN = 15, type="01"):
 
     return res
 
-
-
 def makeParser():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-pr', '--problem', default="maxVofCube", help='problem name')
@@ -65,7 +63,7 @@ def makeParser():
 
 def makeIpoptOptionsFile(workdir, optFileName):
     # see https://coin-or.github.io/Ipopt/OPTIONS.html
-    with open(workdir + "/" + optFile, 'w') as f:
+    with open(workdir + "/" + optFileName, 'w') as f:
         f.write("linear_solver ma57\n")
         f.write("max_iter 10000\n")
         f.write("constr_viol_tol 0.0001\n")
@@ -78,7 +76,7 @@ def makeIpoptOptionsFile(workdir, optFileName):
 
 def makeScipOptionsFile(workdir, optFileName):
     # https://scip.zib.de/doc-6.0.2/html/PARAMETERS.php
-    with open(workdir + "/" + optFile, 'w') as f:
+    with open(workdir + "/" + optFileName, 'w') as f:
         f.write('display/freq = 100\n')
         f.write('display/verblevel = 4\n')
         f.write('limits/gap = 1e-06\n')
@@ -143,6 +141,9 @@ if __name__ == "__main__":
 
     theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvoldell"]], \
                              workdir=workdir, debug=False)
+    # theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["ui4.kiae.vvvol"]], \
+    #                          workdir=workdir, debug=False)
+
     # Variables declarations for Python 3.*
     optFile = ""
     solved = []
