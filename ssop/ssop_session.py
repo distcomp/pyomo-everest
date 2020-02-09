@@ -50,6 +50,27 @@ def makeParser():
     parser.add_argument('-db', '--debug', action='store_true')
     return parser
 
+def makeSolverOptionsFile(optFilePath, solver="ipopt", dictOptVal={}, **optvals):
+    """
+    Write solver options to file
+    :param optFilePath: path to the file to write
+    :param solver: {ipopt|scip|...}
+    :param dictOptVal: dictionary with options {"option1": value1, "option2": value2, ...}
+                       USE this, e.g. for SCIP where option name may contain "/" symbol
+    :param **optvals: "pointer" to the list with options {option1=value1, option2=value2, ...}
+    :return: optFile as File
+    """
+    if not (solver in ssop_config.SSOP_SOLVERS):
+        raise ValueError("Invalid solver name (%s). Choices: %s" % (solver, ssop_config.SSOP_SOLVERS))
+    with open(optFilePath, 'w') as f:
+        for opt, value in dictOptVal.items():
+            f.write(opt + ssop_config.SOLVER_OPTIONS_DELIMETER[solver] + str(value) + "\n")
+        for opt, value in optvals.items():
+            f.write(opt + ssop_config.SOLVER_OPTIONS_DELIMETER[solver] + str(value) + "\n")
+        f.close()
+
+    return f
+
 class SsopSession:
     def __init__(self, name='problem', token=ssop_config.SSOP_TOKEN_FILE, appId=ssop_config.SSOP_ID, resources=[], \
                  workdir=ssop_config.SSOP_DEFAULT_WORKING_DIR, debug=False):
@@ -69,27 +90,6 @@ class SsopSession:
 
     def makeFileName(self, fname, suffix=""):
         return os.path.join(self.workdir, fname + suffix)
-
-    def makeSolverOptionsFile(self, optFilePath, solver="ipopt", dictOptVal={}, **optvals):
-        """
-        Write solver options to file
-        :param optFilePath: path to the file to write
-        :param solver: {ipopt|scip|...}
-        :param dictOptVal: dictionary with options {"option1": value1, "option2": value2, ...}
-                           USE this, e.g. for SCIP where option name may contain "/" symbol
-        :param **optvals: "pointer" to the list with options {option1=value1, option2=value2, ...}
-        :return: optFile as File
-        """
-        if not (solver in ssop_config.SSOP_SOLVERS):
-            raise ValueError("Invalid solver name (%s). Choices: %s" % (solver, ssop_config.SSOP_SOLVERS))
-        with open(optFilePath, 'w') as f:
-            for opt, value in dictOptVal.items():
-                f.write(opt + ssop_config.SOLVER_OPTIONS_DELIMETER[solver] + str(value) + "\n")
-            for opt, value in optvals.items():
-                f.write(opt + ssop_config.SOLVER_OPTIONS_DELIMETER[solver] + str(value) + "\n")
-            f.close()
-
-        return f
 
     def saveResults(self, zipFilePath, nlNames):
         solList = []
