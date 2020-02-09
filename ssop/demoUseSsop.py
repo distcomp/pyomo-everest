@@ -158,10 +158,19 @@ if __name__ == "__main__":
     # Write options file
     if solver == "scip":
         optFile = 'scipdemo.set'
-        makeScipOptionsFile(workdir, optFile)
+        # makeScipOptionsFile(workdir, optFile)
+        theSession.makeSolverOptionsFile(workdir + "/" + optFile, solver="scip",  \
+                        dictOptVal={"display/freq":100, "display/verblevel": 4, \
+                                    "limits/gap":1e-06, "limits/memory": 28000}
+                                         )
     if solver == "ipopt":
         optFile = 'ipopt.opt'
-        makeIpoptOptionsFile(workdir, optFile)
+        # makeIpoptOptionsFile(workdir, optFile)
+        theSession.makeSolverOptionsFile(workdir + "/" + optFile, solver="ipopt",  \
+                                         linear_solver="ma57", max_iter=10000, \
+                                         constr_viol_tol=0.0001,
+                                         warm_start_init_point="yes", warm_start_bound_push=1e-06, \
+                                         print_level=4, print_user_options="yes")
 
     # Solve all problems by SSOP
     if solver == "ipopt":
