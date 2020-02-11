@@ -18,13 +18,17 @@ SSOP_RESOURCES = {"vvvolhome"      : "5d167bbf1200008937f93ff9", \
                   # 'restopt-vm1'  : '544e54293300003f0038c674', \
                   # 'restopt-vm2'  : '544e82673300003f0038c687', \
 
+# Solvers available for SSOP
+SSOP_SOLVERS = ["ipopt", "scip"]
+SOLVER_OPTIONS_DELIMETER = {"ipopt" : " ", "scip" : " = "}
+
 PARAMETER_SWEEP_ID = "530f36d73d00002d04548b0e"
 SOLVE_AMPL_STUB_ID = "vladimirv/solve-ampl-stub" #"531f44233e0000c015f09ad3"
 SSOP_ID = "vladimirv/solve-set-opt-probs" #"5bb2783e420000772e1049fd"
 
 
 # Add your Everest login and password here to make token update automatically
-SSOP_TOKEN_FILE = "/home/vladimirv/mc2/python-api/.token-optmod" #"/home/vladimirv/python_work/pyomo-everest/ssop/.token" #" "C:\\_SvF\\TMP\\.token"
+SSOP_TOKEN_FILE = "/home/vladimirv/mc2/python-api/.token30d" #"/home/vladimirv/python_work/pyomo-everest/ssop/.token" #" "C:\\_SvF\\TMP\\.token"
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
 
 # Working dirs
