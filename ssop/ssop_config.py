@@ -10,7 +10,11 @@ SSOP_RESOURCES = {"vvvolhome"      : "5d167bbf1200008937f93ff9", \
                   "vvvoldell"      : "5c5b0d9c410000a25e4c9b99", \
                   "ui4.kiae.vvvol" : "5addfc3115000084cb623517", \
                   "hse"            : "5e3ec8641100003a446a8be5",  \
-                  "govorun.vvvol"  : "5dd6c22a120000bd043f3216"  \
+                  "govorun.vvvol"  : "5dd6c22a120000bd043f3216",  \
+                  "govorun.ssmir"  : "5d44926b0f0000b553cd4172",  \
+
+                  "test-pool-scip-ipopt" : "5ec6e8c22f00001359654deb", #vvvolhome2+vvvoldell \
+                  "pool-scip-ipopt" : "5ec44a9c2f0000bd4d64faf9" # ui4.kiae.vvvol+hse+vvvolhome2+vvvoldell \
                   }
 
                   # 'irbis1'       : '52eb8d4e420000f401166a2e', \
@@ -28,11 +32,12 @@ SSOP_ID = "vladimirv/solve-set-opt-probs" #"5bb2783e420000772e1049fd"
 
 
 # Add your Everest login and password here to make token update automatically
-SSOP_TOKEN_FILE = "/home/vladimirv/mc2/python-api/.token30d" #"/home/vladimirv/python_work/pyomo-everest/ssop/.token" #" "C:\\_SvF\\TMP\\.token"
+SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/mc2/python-api/.token30d" # "/home/vladimirv/mc2/python-api/.token30d" #"/home/vladimirv/python_work/pyomo-everest/ssop/.token" #" "C:\\_SvF\\TMP\\.token"
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
 
+
 # Working dirs
-SSOP_DEFAULT_WORKING_DIR = "/home/vladimirv/python_work/pyomo-everest/ssop/.tmp"
+SSOP_DEFAULT_WORKING_DIR = "/mnt/hgst2/ext4/python_work/pyomo-everest/ssop/.tmp" # "/home/vladimirv/python_work/pyomo-everest/ssop/.tmp"
 
 # Run miscellaneous
 SSOP_RUN_SH_PREFIX = "run-" # run-ipopt.sh, run-scip.sh, run-fscip.sh ...

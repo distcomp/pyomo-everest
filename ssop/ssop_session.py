@@ -161,7 +161,7 @@ class SsopSession:
 
         self.nJobs = self.nJobs + 1
 
-        print("Job " + jobName + ", " + jobId + " is running")
+        print("Job " + jobName + ", " + jobId + " is starting")
 
         try:
             result = job.result()

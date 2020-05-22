@@ -54,7 +54,7 @@ def binaryHypercube(N, UpN = 15, type="01"):
 def makeParser():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-pr', '--problem', default="maxVofCube", help='problem name')
-    parser.add_argument('-wd', '--workdir', default='/home/vladimirv/python_work/pyomo-everest/ssop/.demo', help='working directory')
+    parser.add_argument('-wd', '--workdir', default='/mnt/hgst2/ext4/python_work/pyomo-everest/ssop/.demo', help='working directory')
     parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'], help='solver to use')
     parser.add_argument('-cf', '--cleanfiles', action='store_true', help='clean working directory')
     parser.add_argument('-cj', '--cleanjobs', action='store_true', help='clean jobs from server')
@@ -93,11 +93,17 @@ def makeNlFiles(workdir, **params):
     dictModels = {}
 
     for b in bCube:
-        s = "%d%d%d" % (b[0],b[1],b[2])
+        s = ""
+        for bd in b:
+            s = "%s%d" % (s, bd)
         probName = problem + '_' + s
         print("Make NL for ", probName)
 
-        theModel = TestProblem(name=probName, shiftSigns=b, shiftDelta=shiftDelta)
+        initx=[]
+        for bb in b:
+            initx.append(0)
+
+        theModel = TestProblem(name=probName, initx=initx, dim=len(b), shiftSigns=b, shiftDelta=shiftDelta)
 
         dictModels[probName] = theModel
         nlName = write_nl_only(theModel.model, workdir + '/' + probName,  symbolic_solver_labels=False)
@@ -137,9 +143,10 @@ if __name__ == "__main__":
     workdir = args.workdir
     solver = args.solver
 
-    bCube = binaryHypercube(3, type="-11")
-
-    theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvoldell"]], \
+    bCube = binaryHypercube(5, type="-11")
+    # resources_list = [ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvolhome2"], ssop_config.SSOP_RESOURCES["vvvoldell"] ]
+    resources_list = [ssop_config.SSOP_RESOURCES['test-pool-scip-ipopt']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
+    theSession = SsopSession(name=args.problem, resources=resources_list, \
                              workdir=workdir, debug=False)
     # theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["ui4.kiae.vvvol"]], \
     #                          workdir=workdir, debug=False)
