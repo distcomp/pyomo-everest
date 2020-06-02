@@ -75,6 +75,7 @@ class SsopSession:
     def __init__(self, name='problem', token=ssop_config.SSOP_TOKEN_FILE, appId=ssop_config.SSOP_ID, resources=[], \
                  workdir=ssop_config.SSOP_DEFAULT_WORKING_DIR, debug=False):
         self.name = name
+        print("token file: " + token)
         with open(token) as f:
             self.token = f.read().strip()
         self.session = everest.Session('ssop-' + name, 'https://optmod.distcomp.org', token=self.token)
