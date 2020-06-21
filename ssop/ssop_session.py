@@ -17,6 +17,8 @@ from zipfile import ZipFile, ZIP_DEFLATED
 import requests
 import everest
 
+from timeit import default_timer as timer
+
 import ssop_config
 
 def makeParser():
@@ -144,6 +146,9 @@ class SsopSession:
         jobId = ""
         solved = []
         unsolved = []
+
+        startTime = timer()
+
         if self.debug:
             print("plan: %s" % (self.makeFileName(self.name, '.plan')))
             print("files: %s" % (self.makeFileName(self.name, '.zip')))
@@ -200,6 +205,9 @@ class SsopSession:
             print("Downloading job's log...")
             self.session.getJobLog(job.id, args.out_prefix + '.log')
             # parseJobLog(args.out_prefix + '.log', tasksRes, args)
+
+        stopTime = timer()
+        print('Job %s took: %g s' % (jobId, stopTime - startTime))
 
         self.listJobsId.append(jobId)
         return solved, unsolved, jobId
