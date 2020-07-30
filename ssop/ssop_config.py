@@ -8,6 +8,7 @@ RESOURCES = [
 SSOP_RESOURCES = {"vvvolhome"      : "5d167bbf1200008937f93ff9", \
                   "vvvolhome2"     : "5e33cf6211000075006a321f", \
                   "vvvoldell"      : "5c5b0d9c410000a25e4c9b99", \
+                  "ui4.kiae"       : "59c520773300004852f4363a", \
                   "ui4.kiae.vvvol" : "5addfc3115000084cb623517", \
                   "hse"            : "5e3ec8641100003a446a8be5",  \
                   "govorun.vvvol"  : "5dd6c22a120000bd043f3216",  \
