@@ -143,9 +143,8 @@ if __name__ == "__main__":
     workdir = args.workdir
     solver = args.solver
 
-    bCube = binaryHypercube(5, type="-11")
-    # resources_list = [ssop_config.SSOP_RESOURCES["vvvolhome"], ssop_config.SSOP_RESOURCES["vvvolhome2"], ssop_config.SSOP_RESOURCES["vvvoldell"] ]
-    resources_list = [ssop_config.SSOP_RESOURCES['test-pool-scip-ipopt']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
+    bCube = binaryHypercube(4, type="-11")
+    resources_list = [ssop_config.SSOP_RESOURCES["test-pool-scip-ipopt"]] #['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
     theSession = SsopSession(name=args.problem, resources=resources_list, \
                              workdir=workdir, debug=False)
     # theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["ui4.kiae.vvvol"]], \
