@@ -29,7 +29,7 @@ SOLVER_OPTIONS_DELIMETER = {"ipopt" : " ", "scip" : " = "}
 
 PARAMETER_SWEEP_ID = "530f36d73d00002d04548b0e"
 SOLVE_AMPL_STUB_ID = "vladimirv/solve-ampl-stub" #"531f44233e0000c015f09ad3"
-SSOP_ID = "vladimirv/solve-set-opt-probs" #"5bb2783e420000772e1049fd"
+SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd"
 
 
 # Add your Everest login and password here to make token update automatically

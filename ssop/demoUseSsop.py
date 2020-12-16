@@ -106,7 +106,7 @@ def makeNlFiles(workdir, **params):
         theModel = TestProblem(name=probName, initx=initx, dim=len(b), shiftSigns=b, shiftDelta=shiftDelta)
 
         dictModels[probName] = theModel
-        nlName = write_nl_only(theModel.model, workdir + '/' + probName,  symbolic_solver_labels=False)
+        nlName = write_nl_only(theModel.model, workdir + '/' + probName,  symbolic_solver_labels=True)
         nlNames.append(probName)
 
     return nlNames, dictModels
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     workdir = args.workdir
     solver = args.solver
 
-    bCube = binaryHypercube(4, type="-11")
+    bCube = binaryHypercube(3, type="-11")
     resources_list = [ssop_config.SSOP_RESOURCES["test-pool-scip-ipopt"]] #['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
     theSession = SsopSession(name=args.problem, resources=resources_list, \
                              workdir=workdir, debug=False)
@@ -236,7 +236,7 @@ if __name__ == "__main__":
 
     # Clean working directory to free disk space at local host, MAY BE
     if args.cleanfiles:
-        theSession.deleteWorkFiles([".nl", ".sol", ".zip", ".plan"])
+        theSession.deleteWorkFiles([".nl", ".row", ".col", ".sol", ".zip", ".plan"])
 
     # Delete jobs created to save disk space at Everest server , MAY BE
     if args.cleanjobs:
