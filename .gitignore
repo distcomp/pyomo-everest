@@ -6,6 +6,8 @@
 *.nl
 *.txt
 
+.idea
+.idea/
 /python-api/
 /ssop/ssop_config.py.bak
 /pe/everest.py.XXX
