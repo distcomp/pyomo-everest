@@ -4,7 +4,7 @@ import os
 from zipfile import ZipFile, ZIP_DEFLATED
 
 s = "abc.sol"
-us = unicode(s)
+us = str(s)
 print("abc in s: " + str('abc' in s))
 print("abc in ustr: " + str("abc" in us))
 print("uabc in ustr: " + str(u"abc" in s))
@@ -28,18 +28,18 @@ print(os.path.join(os.path.dirname(__file__)))
 
 path = "/home/user/some/ m_ore/f.opt"
 pathSplitted = path.split("/")
-print pathSplitted
-print pathSplitted[len(pathSplitted) - 1]
+print(pathSplitted)
+print(pathSplitted[len(pathSplitted) - 1])
 quit()
 
 files = ["f1", "f2", "f3"]
-print "".join(files[i] + " " for i in range(len(files)))
+print("".join(files[i] + " " for i in range(len(files))))
 
 quit()
 
 tdir = tmp.mkdtemp()
 
-print str(tdir)
+print(str(tdir))
 
 for k in ssop_config.SSOP_RESOURCES.keys():
     print(ssop_config.SSOP_RESOURCES[k])
