@@ -31,12 +31,12 @@ class TestProblem:
 
         def init_x(model, i):
             return initx[i-1]
-        self.model.x = Var(self.model.idx, initialize=init_x, within=Reals, bounds=(-2, 2))
+        self.model.x = Var(self.model.idx, initialize=init_x, within=pyo.Reals, bounds=(-2, 2))
 
         # Objective as auxiliarry variable. objvar, to be in complience with SCIP
         def init_objvar(model):
             return -sum(init_x(model,i)**2 for i in model.idx)
-        self.model.objvar = Var(initialize=init_objvar, within=Reals)
+        self.model.objvar = Var(initialize=init_objvar, within=pyo.Reals)
 
         def cons_objvar_rule(model):
             return (-sum(model.x[i]**2 for i in model.idx) <= model.objvar)
