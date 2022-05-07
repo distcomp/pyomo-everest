@@ -13,7 +13,7 @@ def getDD_MM_YY_HH_MM():
     return time.strftime("%d-%m-%Y-%H:%M", time.gmtime())
 
 def get_token(path):
-    print 'Try to get token[' + ssop_config.SSOP_TOKEN_FILE + ']'
+    print('Try to get token[' + ssop_config.SSOP_TOKEN_FILE + ']')
     manualLogin = False
     if not isinstance(ssop_config.EVEREST_LOGIN, str):
         manualLogin = True
@@ -32,7 +32,7 @@ def get_token(path):
                           'ssop_' + getDD_MM_YY_HH_MM())
     else:
         import getpass
-        login = raw_input('Your Everest login: ')
+        login = input('Your Everest login: ')
         pw = getpass.getpass('Your Everest password: ')
         token = everest.get_token('https://everest.distcomp.org',
                           login,
@@ -42,7 +42,7 @@ def get_token(path):
 
     with open(path, 'w') as f:
         f.write(token)
-    print "Token[" + path + "] has been updated"
+    print("Token[" + path + "] has been updated")
 
     return
 
@@ -61,7 +61,7 @@ def makeSession(name, tokenPath):
 
 def check_token(path, resourceId, application='sol/hostname'):
 # Test token by call simple application
-    print 'Checking token=[' + path + ']'
+    print('Checking token=[' + path + ']')
     with open(path, 'r') as f:
         token = f.read().strip()
     try:
@@ -76,20 +76,20 @@ def check_token(path, resourceId, application='sol/hostname'):
         return False
 
 def check_token_time(path, timeInterval):
-    print 'Checking token=[' + path + ']'
+    print('Checking token=[' + path + ']')
     try:
         tokentime = os.path.getmtime(path)
     except OSError:
         return False
-    print 'Token mtime: ' + str(tokentime)
-    print 'Token mdata: ' + str(datetime.datetime.utcfromtimestamp(tokentime))
+    print('Token mtime: ' + str(tokentime))
+    print('Token mdata: ' + str(datetime.datetime.utcfromtimestamp(tokentime)))
     if tokentime + timeInterval >= time.time():
         return True
     else:
         return False
 
 def update_token(path):
-    print 'token=[' + path + ']'
+    print('token=[' + path + ']')
     # if not check_token_time(path, ssop_config.UPDATE_TOKEN_PERIOD_IN_SEC):
     if not check_token(path, ssop_config.SSOP_RESOURCES['vvvolhome'], 'sol/hostname'):
             get_token(path)
@@ -125,8 +125,8 @@ if __name__ == "__main__":
         check_token(ssop_config.SSOP_TOKEN_FILE, ssop_config.SSOP_RESOURCES['vvvolhome'], 'sol/hostname')
     if action == 'check_token_time':
         if check_token_time(ssop_config.SSOP_TOKEN_FILE, ssop_config.UPDATE_TOKEN_PERIOD_IN_SEC): #(ssop_config.SSOP_TOKEN_FILE, ssop_config.SSOP_RESOURCES['vvvolhome'], 'sol/hostname')
-            print "Token seems to be VALID"
+            print("Token seems to be VALID")
         else:
-            print "Token seems to be INVALID"
+            print("Token seems to be INVALID")
     if action == 'update_token':
         update_token(ssop_config.SSOP_TOKEN_FILE)
