@@ -64,11 +64,11 @@ def main(tmpDir):
     stubs.extend(args.file)
 
     if not stubs:
-        print 'No problem stubs specified'
+        print('No problem stubs specified')
         sys.exit(1)
 
     # if not args.resources:
-    #     print 'No resources specified'
+    #     print('No resources specified')
     #     sys.exit(1)
 
     if args.debug:
@@ -135,17 +135,17 @@ def main(tmpDir):
         except everest.JobException:
             result = session.getJobStatus(job.id)
             if 'result' in result:
-                print 'Job failed, result downloaded'
+                print('Job failed, result downloaded')
                 session.getFile(result['result']['results'], makeName('-results.zip'))
                 saveResults(makeName('-results.zip'), stubNames, args)
                 if args.get_log:
-                    print "Downloading job's log..."
+                    print("Downloading job's log...")
                     session.getJobLog(job.id, args.out_prefix + '.log')
             else:
-                print 'Job failed, no result available'
+                print('Job failed, no result available')
             sys.exit(1)
         except KeyboardInterrupt:
-            print 'Cancelling the job...'
+            print('Cancelling the job...')
             try:
                 job.cancel()
             except requests.exceptions.HTTPError as e:
@@ -155,13 +155,13 @@ def main(tmpDir):
             try:
                 result = job.result()
             except everest.JobException as e:
-                print e
+                print(e)
             return
 
         session.getFile(result['results'], makeName('-results.zip'))
         tasksRes = saveResults(makeName('-results.zip'), stubNames, args)
         if args.get_log:
-            print "Downloading job's log..."
+            print("Downloading job's log...")
             session.getJobLog(job.id, args.out_prefix + '.log')
             parseJobLog(args.out_prefix + '.log', tasksRes, args)
     finally:
@@ -280,7 +280,7 @@ def saveResults(jobResults, stubNames, args):
                 jobs[jobId]['status'] = 'failed'
 
     if not jobs:
-        print 'No incumbents or solutions in job results'
+        print('No incumbents or solutions in job results')
         return jobs
 
     solutions = defaultdict(list)
@@ -309,8 +309,8 @@ def saveResults(jobResults, stubNames, args):
             info['has_solution'] = True
             infos.append(info)
             outName = stubName.replace('.nl', '.sol')
-            print 'Saving solution %s (%s) for task %d with incumbent %f' % (
-                outName, best['status'], info['taskNum'], best['val'])
+            print('Saving solution %s (%s) for task %d with incumbent %f' % (
+                outName, best['status'], info['taskNum'], best['val']))
             z.writestr(outName, best['sol'])
 
     vals = [v['val'] for v in jobs.values() if 'val' in v]
@@ -320,10 +320,10 @@ def saveResults(jobResults, stubNames, args):
 
     withSol = [i for i in infos if i['has_solution']]
     if not withSol:
-        print 'No solutions in job results'
+        print('No solutions in job results')
         return jobs
     best = min(withSol, key=lambda v: v['incumbent'])
-    print 'Best incumbent %f found for %s' % (best['incumbent'], best['stub'])
+    print('Best incumbent %f found for %s' % (best['incumbent'], best['stub']))
 
     if args.save_status:
         with open(args.out_prefix + '-status.txt', 'w') as f:
