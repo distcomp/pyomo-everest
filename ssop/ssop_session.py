@@ -217,6 +217,15 @@ class SsopSession:
             self.session.deleteJob(jid)
         return
 
+    def deleteAllJobsExceptLast(self,k):
+        n = len(self.listJobsId)
+        k = min(k, n)
+        for i in range(n-k): #jid in self.listJobsId:
+            jid = self.listJobsId[i]
+            self.session.deleteJob(jid)
+        return
+
+
     def deleteWorkFiles(self, patterns):
         files = os.listdir(self.workdir)
         for f in files:

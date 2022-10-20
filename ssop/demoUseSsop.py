@@ -56,6 +56,7 @@ def makeParser():
     parser.add_argument('-pr', '--problem', default="maxVofCube", help='problem name')
     parser.add_argument('-wd', '--workdir', default='/mnt/hgst2/ext4/python_work/pyomo-everest/ssop/.demo', help='working directory')
     parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'], help='solver to use')
+    parser.add_argument('-n', '--nofjobs', default=2, choices=[2,3,4], type=int, help='Number of SSOP Jobs in main test')
     parser.add_argument('-cf', '--cleanfiles', action='store_true', help='clean working directory')
     parser.add_argument('-cj', '--cleanjobs', action='store_true', help='clean jobs from server')
     parser.add_argument('-x', '--extra', action='store_true', help='extra tests')
@@ -194,27 +195,28 @@ if __name__ == "__main__":
     # ===============================================================
     # || Change the set of models: increase shift of cube vertices ||
     # ===============================================================
-    print("===============================================================")
-    print("|| Change the set of models: increase shift of cube vertices ||")
-    print("===============================================================")
-    # print("========== Next set of problems ... ==========")
-    shiftDelta = 0.2
-    print("The shiftDelta = %4.2f" % (shiftDelta))
-    nlNames, dictModels = makeNlFiles(workdir, problem=args.problem, bCube=bCube, shiftDelta=shiftDelta)
+    for k in range(1, args.nofjobs):
+        print("===============================================================")
+        print("|| Change the set of models: increase shift of cube vertices ||")
+        print("===============================================================")
+        # print("========== Next set of problems ... ==========")
+        shiftDelta = shiftDelta + 0.05
+        print("The shiftDelta = %4.2f" % (shiftDelta))
+        nlNames, dictModels = makeNlFiles(workdir, problem=args.problem, bCube=bCube, shiftDelta=shiftDelta)
 
-    # Solve all problems by the SAME SESSION !
+        # Solve all problems by the SAME SESSION !
 
-    if solver == "ipopt":
-        solved, unsolved, jobId = theSession.runJob(nlNames, optFile) # by default solver = "ipopt"
-    if solver == "scip":
-        solved, unsolved, jobId = theSession.runJob(nlNames, optFile, solver="scip")
+        if solver == "ipopt":
+            solved, unsolved, jobId = theSession.runJob(nlNames, optFile) # by default solver = "ipopt"
+        if solver == "scip":
+            solved, unsolved, jobId = theSession.runJob(nlNames, optFile, solver="scip")
 
-    print("solved:   ", solved)
-    print("unsolved: ", unsolved)
-    print("Job %s is finished" % (jobId))
+        print("solved:   ", solved)
+        print("unsolved: ", unsolved)
+        print("Job %s is finished" % (jobId))
 
-    # Check results
-    checkResults(workdir, solved, dictModels)
+        # Check results
+        checkResults(workdir, solved, dictModels)
 
     # Call different solvers as extra tests
     if args.extra:
@@ -240,7 +242,7 @@ if __name__ == "__main__":
 
     # Delete jobs created to save disk space at Everest server , MAY BE
     if args.cleanjobs:
-        theSession.deleteAllJobs()
+        theSession.deleteAllJobsExceptLast(2)
 
     # CLOSE THE SESSION !!! MUST BE
     theSession.session.close()
