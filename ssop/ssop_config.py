@@ -33,7 +33,7 @@ SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd"
 
 
 # Add your Everest login and password here to make token update automatically
-SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/mc2/python-api/.token30d"
+SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/SvF/pyomo-everest/python-api/.token90d"
 # The command to update 30-days token:
 # python everest.py get-token -server_uri https://optmod.distcomp.org -u vladimirv -l ssop -t 2592000 | tee .token30d
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
