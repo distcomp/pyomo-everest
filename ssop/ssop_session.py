@@ -73,13 +73,25 @@ def makeSolverOptionsFile(optFilePath, solver="ipopt", dictOptVal={}, **optvals)
 
     return f
 
+def getToken(token_file, WF_TOKEN_ENV_NAME='EVEREST_TASK_TOKEN'):
+    try:
+        token=os.environ[WF_TOKEN_ENV_NAME]
+        print(WF_TOKEN_ENV_NAME + ' token is found and will be used')
+    except KeyError:
+        print("Token file: " + token)
+        with open(token) as f:
+            token = f.read().strip()
+
 class SsopSession:
-    def __init__(self, name='problem', token=ssop_config.SSOP_TOKEN_FILE, appId=ssop_config.SSOP_ID, resources=[], \
+    def __init__(self, name='problem', token_file=ssop_config.SSOP_TOKEN_FILE, appId=ssop_config.SSOP_ID, resources=[], \
                  workdir=ssop_config.SSOP_DEFAULT_WORKING_DIR, debug=False):
         self.name = name
-        print("token file: " + token)
-        with open(token) as f:
-            self.token = f.read().strip()
+        # print("token file: " + token)
+        # with open(token) as f:
+        #     self.token = f.read().strip()
+
+        self.token = getToken(token_file)
+
         self.session = everest.Session('ssop-' + name, 'https://optmod.distcomp.org', token=self.token)
         # self.ssop = everest.App(ssop_config.SSOP_ID, self.session)
         self.ssopApp = everest.App(appId, self.session)
