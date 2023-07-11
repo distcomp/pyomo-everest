@@ -1,0 +1,2 @@
+print_level 4
+linear_solver ma86
