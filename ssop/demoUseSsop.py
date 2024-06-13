@@ -1,24 +1,6 @@
 from __future__ import print_function
-from future.utils import iteritems
 from __future__ import print_function
-from future.utils import iteritems
 
-import os
-import sys
-import argparse
-
-# import pyomo.environ as pyo
-#
-# from pyomo.core.base.PyomoModel import *
-# from pyomo.core.base.param import *
-# from pyomo.core.base.var import *
-# from pyomo.core.base.sets import *
-# from pyomo.core.base.rangeset import *
-# from pyomo.core.base.objective import *
-# from pyomo.core.base.constraint import *
-# from pyomo.core.base.set_types import *
-#
-# from pyomo.opt import *
 from write import write_nl_only
 from write import get_smap_var
 from read import read_sol_smap_var

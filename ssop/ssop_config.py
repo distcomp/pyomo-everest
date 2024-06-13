@@ -5,7 +5,8 @@ RESOURCES = [
     "578ea88d310000b33c8c7f44"  # fujiRestOpt
 ]
 
-SSOP_RESOURCES = {"vvvolhome"      : "5d167bbf1200008937f93ff9", \
+SSOP_RESOURCES = {"shark1vvv"      : "65e4490e1200001100f99199", \
+                  "vvvolhome"      : "5d167bbf1200008937f93ff9", \
                   "vvvolhome2"     : "5e33cf6211000075006a321f", \
                   "vvvoldell"      : "5c5b0d9c410000a25e4c9b99", \
                   "ui4.kiae"       : "59c520773300004852f4363a", \
@@ -33,7 +34,7 @@ SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd"
 
 
 # Add your Everest login and password here to make token update automatically
-SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/SvF/pyomo-everest/python-api/.token90d"
+SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/SvF/pyomo-everest/python-api/.token365d"
 # The command to update 30-days token:
 # python everest.py get-token -server_uri https://optmod.distcomp.org -u vladimirv -l ssop -t 2592000 | tee .token30d
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
