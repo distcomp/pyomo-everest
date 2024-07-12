@@ -1,4 +1,4 @@
-import pyomo.environ
+import pyomo.environ as pyo
 from pyomo.core import SymbolMap
 from pyomo.opt import (ReaderFactory,
                        ResultsFormat)
@@ -111,10 +111,14 @@ if __name__ == "__main__":
 
     model = create_model()
     sol_filename = "example.sol"
-    symbol_map_filename = "example.nl.symbol_map.pickle"
+    symbol_map_filename = "example.symbol_map.pickle"
     results = read_sol(model, sol_filename, symbol_map_filename)
     if results.solver.termination_condition != \
        TerminationCondition.optimal:
         raise RuntimeError("Solver did not terminate with status = optimal")
     model.solutions.load_from(results)
     print("Objective: %s" % (model.o()))
+    print("x: %s" % (pyo.value(model.x)))
+    print("y: %s" % (pyo.value(model.y)))
+    print("x+y: %s" % (pyo.value(model.x + model.y)))
+    print("x+y: %s" % (pyo.value(pyo.quicksum(x for x in (model.x, model.y)))))

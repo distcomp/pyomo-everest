@@ -1,4 +1,4 @@
-import pyomo.environ
+import pyomo.environ as pyo
 from pyomo.core import ComponentUID
 from pyomo.opt import ProblemFormat
 # use fast version of pickle (python 2 or 3)

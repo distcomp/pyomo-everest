@@ -18,7 +18,7 @@ if __name__ == "__main__":
     with SolverFactory("/opt/solvers/bin/ipopt") as opt:
         model = create_model()
         # model.pprint()
-        print("Before SOLVE x+y: %s" % (value(model.y + log(model.x))))
+        print("Before SOLVE x+y: %s" % (value(model.y + model.x)))
         # opt.options["print_level"] = 4
         opt.options['print_user_options'] = 'yes'
         opt.options['option_file_name'] = 'ipopt.opt'
@@ -30,5 +30,5 @@ if __name__ == "__main__":
         print("Objective: %s" % (model.o()))
         print("x: %s" % (value(model.x)))
         print("y: %s" % (value(model.y)))
-        print("x+log(y): %s" % (value(model.x + log(model.y))))
-        print("x+log(y): %s" % (value(quicksum(x for x in (model.x, log(model.y))) )))
+        print("x+y: %s" % (value(model.x + log(model.y))))
+        print("x+y: %s" % (value(quicksum(x for x in (model.x, model.y)) )))
