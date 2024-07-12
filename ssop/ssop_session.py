@@ -239,8 +239,10 @@ class SsopSession:
     def deleteAllJobsExceptLast(self,k):
         n = len(self.listJobsId)
         k = min(k, n)
+        print("Last jobs will be DELETED")
         for i in range(n-k): #jid in self.listJobsId:
             jid = self.listJobsId[i]
+            # print("delete " + jid)
             self.session.deleteJob(jid)
         return
 

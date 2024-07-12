@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
     # Delete jobs created to save disk space at Everest server , MAY BE
     if args.cleanjobs:
-        theSession.deleteAllJobsExceptLast(2)
+        theSession.deleteAllJobsExceptLast(0)
 
     # CLOSE THE SESSION !!! MUST BE
     theSession.session.close()
