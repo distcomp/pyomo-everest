@@ -6,21 +6,6 @@ import argparse
 # from pyomo.environ import *
 import pyomo.environ as pyo
 
-# from pyomo.core.base.PyomoModel import *
-# from pyomo.core.base.param import *
-# from pyomo.core.base.var import *
-# from pyomo.core.base.sets import *
-# from pyomo.core.base.rangeset import *
-# from pyomo.core.base.objective import *
-# from pyomo.core.base.constraint import *
-# from pyomo.core.base.set_types import *
-
-from pyomo.opt import *
-from write import *
-
-from read import read_sol_smap
-from read import read_sol_smap_var
-
 class TestProblem:
     def __init__(self, name="testProblem", initx=[0, 0, 0], dim=3, shiftDelta=0.1, shiftSigns=[1, 1, 1], extName='', debug=False, options=None, model_options=''):
         self.name = name

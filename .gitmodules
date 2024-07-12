@@ -1,3 +1,0 @@
-[submodule "python-api"]
-	path = python-api
-	url = git@gitlab.com:everest/python-api.git
