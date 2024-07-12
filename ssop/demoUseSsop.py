@@ -54,7 +54,7 @@ def binaryHypercube(N, UpN = 15, type="01"):
 def makeParser():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-pr', '--problem', default="maxVofCube", help='problem name')
-    parser.add_argument('-wd', '--workdir', default='/mnt/hgst2/ext4/python_work/pyomo-everest/ssop/.demo', help='working directory')
+    parser.add_argument('-wd', '--workdir', default='/mnt/hgst2/ext4/git_work/pyomo-everest/ssop/.tmp', help='working directory')
     parser.add_argument('-s', '--solver', default='ipopt', choices=['ipopt', 'scip'], help='solver to use')
     parser.add_argument('-n', '--nofjobs', default=2, choices=[2,3,4], type=int, help='Number of SSOP Jobs in main test')
     parser.add_argument('-cf', '--cleanfiles', action='store_true', help='clean working directory')
