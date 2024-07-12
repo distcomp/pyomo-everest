@@ -1,6 +1,22 @@
 from __future__ import print_function
-from __future__ import print_function
+from future.utils import iteritems
 
+import os
+import sys
+import argparse
+
+# import pyomo.environ as pyo
+#
+# from pyomo.core.base.PyomoModel import *
+# from pyomo.core.base.param import *
+# from pyomo.core.base.var import *
+# from pyomo.core.base.sets import *
+# from pyomo.core.base.rangeset import *
+# from pyomo.core.base.objective import *
+# from pyomo.core.base.constraint import *
+# from pyomo.core.base.set_types import *
+#
+# from pyomo.opt import *
 from write import write_nl_only
 from write import get_smap_var
 from read import read_sol_smap_var
@@ -129,7 +145,7 @@ if __name__ == "__main__":
     solver = args.solver
 
     bCube = binaryHypercube(3, type="-11")
-    resources_list = [ssop_config.SSOP_RESOURCES["test-pool-scip-ipopt"]] #['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
+    resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] # test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
     theSession = SsopSession(name=args.problem, resources=resources_list, \
                              workdir=workdir, debug=False)
     # theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["ui4.kiae.vvvol"]], \
@@ -171,7 +187,7 @@ if __name__ == "__main__":
 
     print("solved:   ", solved)
     print("unsolved: ", unsolved)
-    print("Job %s is finished" % (jobId))
+    print("Job %s is finished" % jobId)
 
     # Check results
     checkResults(workdir, solved, dictModels)
@@ -232,10 +248,3 @@ if __name__ == "__main__":
     theSession.session.close()
 
     print("Done")
-
-
-
-
-
-
-

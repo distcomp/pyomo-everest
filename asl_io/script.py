@@ -5,7 +5,7 @@ def create_model():
     model = ConcreteModel()
     model.x = Var(initialize=1.)
     model.y = Var(initialize=5.)
-    model.o = Objective(expr=((model.x - 2*model.y)**2 + 10*model.y))
+    model.o = Objective(expr=((pyomo.environ.sin(model.x) - 2*model.y)**2 + 10*model.y))
     model.cxLo = Constraint(expr=model.x >= 1)
     model.cxUp = Constraint(expr=model.x <= 5)
     model.cyLo = Constraint(expr=model.y >= 1)
@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
     with SolverFactory("/opt/solvers/bin/ipopt") as opt:
         model = create_model()
+        # model.pprint()
         print("Before SOLVE x+y: %s" % (value(model.y + log(model.x))))
         # opt.options["print_level"] = 4
         opt.options['print_user_options'] = 'yes'
