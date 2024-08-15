@@ -1,3 +1,4 @@
+import pyomo
 import pyomo.environ as pyo
 from pyomo.core import ComponentUID
 from pyomo.opt import ProblemFormat
@@ -6,6 +7,18 @@ from six.moves import cPickle as pickle
 
 NL_EXT = '.nl'
 
+def get_cuid_pairs(symbol_map):
+    tmp_buffer = {} # this makes the process faster
+    # check pyomo version
+    ver = tuple(map(int, pyomo.__version__.split('.')))
+    if ver[:2] >= (6, 6):
+        return tuple(
+            (symbol, ComponentUID(obj, cuid_buffer=tmp_buffer))
+            for symbol, obj in symbol_map.bySymbol.items())
+    else:
+        return tuple(
+            (symbol, ComponentUID(weak_ref(), cuid_buffer=tmp_buffer))
+            for symbol, weak_ref in symbol_map.bySymbol.items())
 
 def write_nl(model, nl_filename, **kwds):
     """
@@ -28,10 +41,7 @@ def write_nl(model, nl_filename, **kwds):
     # storing the NL file label with a ComponentUID, which is
     # an efficient lookup code for model components (created
     # by John Siirola)
-    tmp_buffer = {} # this makes the process faster
-    symbol_cuid_pairs = tuple(
-        (symbol, ComponentUID(var_weakref(), cuid_buffer=tmp_buffer))
-        for symbol, var_weakref in symbol_map.bySymbol.items())
+    symbol_cuid_pairs = get_cuid_pairs(symbol_map)
     with open(symbol_map_filename, "wb") as f:
         pickle.dump(symbol_cuid_pairs, f)
 
@@ -60,10 +70,7 @@ def write_nl_smap(model, nl_filename, **kwds):
     # storing the NL file label with a ComponentUID, which is
     # an efficient lookup code for model components (created
     # by John Siirola)
-    tmp_buffer = {} # this makes the process faster
-    symbol_cuid_pairs = tuple(
-        (symbol, ComponentUID(var_weakref(), cuid_buffer=tmp_buffer))
-        for symbol, var_weakref in symbol_map.bySymbol.items())
+    symbol_cuid_pairs = get_cuid_pairs(symbol_map)
     with open(symbol_map_filename, "wb") as f:
         pickle.dump(symbol_cuid_pairs, f)
 
@@ -88,18 +95,6 @@ def write_nl_only(model, nl_filename, **kwds):
     nlFile, smap_id = model.write(nl_filename + ".nl",
                              format=ProblemFormat.nl,
                              io_options=kwds)
-    # symbol_map = model.solutions.symbol_map[smap_id]
-
-    # # save a persistent form of the symbol_map (using pickle) by
-    # # storing the NL file label with a ComponentUID, which is
-    # # an efficient lookup code for model components (created
-    # # by John Siirola)
-    # tmp_buffer = {} # this makes the process faster
-    # symbol_cuid_pairs = tuple(
-    #     (symbol, ComponentUID(var_weakref(), cuid_buffer=tmp_buffer))
-    #     for symbol, var_weakref in symbol_map.bySymbol.items())
-    # with open(symbol_map_filename, "wb") as f:
-    #     pickle.dump(symbol_cuid_pairs, f)
 
     return nlFile
 
@@ -122,17 +117,6 @@ def get_smap_var(model):
     nlFile, smap_id = model.write('/dev/null',
                              format=ProblemFormat.nl, io_options={})
     symbol_map = model.solutions.symbol_map[smap_id]
-
-    # # save a persistent form of the symbol_map (using pickle) by
-    # # storing the NL file label with a ComponentUID, which is
-    # # an efficient lookup code for model components (created
-    # # by John Siirola)
-    # tmp_buffer = {} # this makes the process faster
-    # symbol_cuid_pairs = tuple(
-    #     (symbol, ComponentUID(var_weakref(), cuid_buffer=tmp_buffer))
-    #     for symbol, var_weakref in symbol_map.bySymbol.items())
-    # with open(symbol_map_filename, "wb") as f:
-    #     pickle.dump(symbol_cuid_pairs, f)
 
     return symbol_map
 

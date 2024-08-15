@@ -29,7 +29,7 @@ def read_sol(model, sol_filename, symbol_map_filename, suffixes=[".*"]):
     with open(symbol_map_filename, "rb") as f:
         symbol_cuid_pairs = pickle.load(f)
     symbol_map = SymbolMap()
-    symbol_map.addSymbols((cuid.find_component(model), symbol)
+    symbol_map.addSymbols((cuid.find_component_on(model), symbol)
                           for symbol, cuid in symbol_cuid_pairs)
 
     # tag the results object with the symbol_map
@@ -63,7 +63,7 @@ def read_sol_smap(model, sol_filename, symbol_filename, suffixes=[".*"]):
     with open(symbol_map_filename, "rb") as f:
         symbol_cuid_pairs = pickle.load(f)
     symbol_map = SymbolMap()
-    symbol_map.addSymbols((cuid.find_component(model), symbol)
+    symbol_map.addSymbols((cuid.find_component_on(model), symbol)
                           for symbol, cuid in symbol_cuid_pairs)
 
     # tag the results object with the symbol_map
@@ -97,7 +97,7 @@ def read_sol_smap_var(model, sol_filename, smap, suffixes=[".*"]):
     # with open(symbol_map_filename, "rb") as f:
     #     symbol_cuid_pairs = pickle.load(f)
     # symbol_map = SymbolMap()
-    # symbol_map.addSymbols((cuid.find_component(model), symbol)
+    # symbol_map.addSymbols((cuid.find_component_on(model), symbol)
     #                       for symbol, cuid in symbol_cuid_pairs)
 
     # tag the results object with the symbol_map passed as smap
