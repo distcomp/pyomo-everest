@@ -18,7 +18,7 @@ these services fron their applications via Everest Python API, https://gitlab.co
 
 Now there are two basic services, which may be used for solve the set of mathematical programming problems in parallel:
 1) https://optmod.distcomp.org/apps/vladimirv/solve-ampl-stub, Smirnov S., Voloshinov V., Sukhosroslov O. [Distributed Optimization on the Base of AMPL Modeling Language and Everest Platform](http://dx.doi.org/10.1016/j.procs.2016.11.037) // Procedia Computer Science, Vol. 101, 2016, pp. 313–322
-2) https://optmod.distcomp.org/apps/vladimirv/solve-set-opt-probs, so called SSOP application. 
+2) https://optmod.distcomp.org/apps/vladimirv/SSOP, so called SSOP application. 
 
 The 1st service looks a bit obsolete know due to extra load of Everest-server, 
 because every problem "spawns" separate Everest Job (see Everest manuals for details).
