@@ -1,5 +1,6 @@
 *.pyc
 *.token
+.365d-token-shark1-2025
 
 *.sol
 *.log
@@ -17,3 +18,8 @@
 /ssop/miscTest/testPlan-8.txt.XXX
 /ssop/miscTest/testPlanApps.txt.XXX
 /ssop/miscTest/
+asl_io/example.col
+asl_io/example.row
+asl_io/example.symbol_map.pickle
+asl_io.bak/
+.gitignore
