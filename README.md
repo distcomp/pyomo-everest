@@ -56,7 +56,7 @@ To use SSOP you need:
 
 **1)** the following modules from **ssop** folder:
 * **ssop_config.py**  with basic configuration parameters, including "default" pathes to TOKEN-file and working directory (*see example of everest.py call to get token in the comment*); 
-IDs of Everest resources might be used by SSOP-jobs and so on
+IDs of Everest resources (see the `SSOP_RESOURCES` dictionary)  with solvers installed and supplied with proper Bash-scripts (**run-ipopt.sh, run-scip.sh**, may be **run-fscip.sh** etc.) might be used by SSOP-jobs and so on.
 *  **ssop_session.py** implementing basic SSOP-abstraction of SSOP-session, inherits Everest-session 
 in the context of SSOP usage and provides basic SSOP-functionality: authorization on Everest-server; opening Everest-session;
 creating PLAN-file for the given list of NL-files (must be placed in the working directory); 
