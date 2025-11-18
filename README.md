@@ -20,10 +20,10 @@ Now there are two basic services, which may be used for solve the set of mathema
 1) https://optmod.distcomp.org/apps/vladimirv/solve-ampl-stub, Smirnov S., Voloshinov V., Sukhosroslov O. [Distributed Optimization on the Base of AMPL Modeling Language and Everest Platform](http://dx.doi.org/10.1016/j.procs.2016.11.037) // Procedia Computer Science, Vol. 101, 2016, pp. 313–322
 2) https://optmod.distcomp.org/apps/vladimirv/SSOP, so called SSOP application. 
 
-The 1st service looks a bit obsolete know due to extra load of Everest-server, 
+The 1st service looks an obsolete now due to extra load of Everest-server, 
 because every problem "spawns" separate Everest Job (see Everest manuals for details).
 
-The 2nd service inherits efficiency of generic Parameter Sweep Everest application, http://everest.distcomp.org/docs/ps/.
+The 2nd service inherits efficiency of the generic Parameter Sweep Everest application, http://everest.distcomp.org/docs/ps/.
 A set of problems is processed in a single Job, each in a separate subtask. In addition PS provides a number of useful features:
 flexible modification of data processing script via PLAN-file; input and outputs data in ZIP-files, which save Internet traffic; 
 simple way to involve additional computing resources, including clusters and supercomputers. 
@@ -33,7 +33,7 @@ Installation and use of SSOP
 --------------- 
 It is assumed that you are a registered Everest user and a member of the **@optMod** users group (see https://optmod.distcomp.org/about)
 
-1) Get a copy of Everests's Python API (it is Python 2.7, 3.7 compatible):
+1) Get a copy of Everests's Python API [it is Python 2.7, 3.12.9 (tested), compatible]:
 
    `wget https://gitlab.com/everest/python-api/raw/master/everest.py`
    
@@ -47,7 +47,7 @@ It is assumed that you are a registered Everest user and a member of the **@optM
    `git clone git@github.com:distcomp/pyomo-everest.git`   
 4) Get everest TOKEN-file in some way, e.g. following the README of Everest Python API test:
    
-   `python everest.py get-token -u USER -l SOME_LABEL | tee .token'
+   `python everest.py get-token -u USER -l SOME_LABEL | tee .token`
    
 5) Create some working directory to store NL-files, SOL-files, 
 solver options file and all other auxiliary files, which will be created or downloaded during computing scenario with SSOP.
@@ -55,7 +55,7 @@ solver options file and all other auxiliary files, which will be created or down
 To use SSOP you need:
 
 **1)** the following modules from **ssop** folder:
-* **ssop_config.py**  with basic configuration parameters, including "default" pathes to TOKEN-file and working directory; 
+* **ssop_config.py**  with basic configuration parameters, including "default" pathes to TOKEN-file and working directory (*see example of everest.py call to get token in the comment*); 
 IDs of Everest resources might be used by SSOP-jobs and so on
 *  **ssop_session.py** implementing basic SSOP-abstraction of SSOP-session, inherits Everest-session 
 in the context of SSOP usage and provides basic SSOP-functionality: authorization on Everest-server; opening Everest-session;
