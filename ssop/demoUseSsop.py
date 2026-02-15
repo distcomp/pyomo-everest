@@ -145,7 +145,7 @@ if __name__ == "__main__":
     solver = args.solver
 
     bCube = binaryHypercube(3, type="-11")
-    resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] # test-docker1 shark1vvv test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
+    resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] # test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
     theSession = SsopSession(name=args.problem, resources=resources_list, \
                              workdir=workdir, debug=False)
     # theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["ui4.kiae.vvvol"]], \
