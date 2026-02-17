@@ -23,3 +23,8 @@ asl_io/example.row
 asl_io/example.symbol_map.pickle
 asl_io.bak/
 .gitignore
+asl_io/example.col
+asl_io/example.row
+asl_io/example.symbol_map.pickle
+asl_io.bak/
+.gitignore

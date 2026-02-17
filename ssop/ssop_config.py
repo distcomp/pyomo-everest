@@ -15,8 +15,7 @@ SSOP_RESOURCES = {"shark1vvv"      : "65e4490e1200001100f99199", \
                   "hse"            : "5e3ec8641100003a446a8be5",  \
                   "govorun.vvvol"  : "5dd6c22a120000bd043f3216",  \
                   "pool-scip-ipopt" : "5ec44a9c2f0000bd4d64faf9", \
-                  "test-pool-scip-ipopt" : "5ec6e8c22f00001359654deb", \
-                  "home-hosts" : "648a35f71000001100844ff2"
+                  "test-pool-scip-ipopt" : "5ec6e8c22f00001359654deb" \
                   }
 # pool-scip-ipopt: ui4.kiae.vvvol, hse, govorun.vvvol, vvvoldell, vvvolhome2
 # test-pool-scip-ipopt: vvvoldell, vvvolhome2
@@ -36,8 +35,8 @@ SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd" "sol/psweep"
 
 
 # Add your Everest login and password here to make token update automatically
-SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/pyomo-everest/.365d-token-shark1-2025"
-# The command to update 30-days token: !!!!
+SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/SvF/pyomo-everest/python-api/.token365d"
+# The command to update 30-days token:
 # python everest.py get-token -server_uri https://optmod.distcomp.org -u vladimirv -l ssop -t 2592000 | tee .token30d
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
 
