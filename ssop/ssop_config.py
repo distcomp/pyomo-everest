@@ -9,6 +9,7 @@ SSOP_RESOURCES = {"shark1vvv"      : "65e4490e1200001100f99199", \
                   "vvvolhome"      : "5d167bbf1200008937f93ff9", \
                   "vvvolhome2"     : "5e33cf6211000075006a321f", \
                   "vvvoldell"      : "5c5b0d9c410000a25e4c9b99", \
+                  "vvvolDellDockerNew"      : "698077a3a60000af05fee11d", \
                   "ui4.kiae"       : "59c520773300004852f4363a", \
                   "ui4.kiae.vvvol" : "5addfc3115000084cb623517", \
                   "hse"            : "5e3ec8641100003a446a8be5",  \
@@ -31,7 +32,7 @@ SOLVER_OPTIONS_DELIMETER = {"ipopt" : " ", "scip" : " = "}
 
 PARAMETER_SWEEP_ID = "530f36d73d00002d04548b0e"
 SOLVE_AMPL_STUB_ID = "vladimirv/solve-ampl-stub" #"531f44233e0000c015f09ad3"
-SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd"
+SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd" "sol/psweep"
 
 
 # Add your Everest login and password here to make token update automatically
