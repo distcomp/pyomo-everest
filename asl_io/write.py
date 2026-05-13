@@ -100,13 +100,8 @@ def write_nl_only(model, nl_filename, **kwds):
 
 def get_smap_var(model):
     """
-    Writes a Pyomo model in NL file format only and returns
-    the symbol map that allows it to be
-    recovered at a later time for a Pyomo model with
-    matching component names.
-    The function DOES NOT WRITE SYMBOL MAP TO FILE
-    see [write] function from /usr/local/lib/python2.7/dist-packages/pyomo/opt/problem/ampl.py
-    calls [convert_problem] from /usr/local/lib/python2.7/dist-packages/pyomo/opt/base/convert.py
+    The function get symbol_map object from Pyomo model.
+    See write_nl_smap for some details.
     """
     # Remove possible suffix '.nl' if any
     # if nl_filename.endswith(NL_EXT): nl_filename = nl_filename[:-len(NL_EXT)]
