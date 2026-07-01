@@ -99,7 +99,7 @@ class SsopSession:
 
         self.token = getToken(token)
 
-        self.session = everest.Session('ssop-' + name, 'https://everest-ru.distcomp.org', token=self.token)
+        self.session = everest.Session('ssop-' + name, ssop_config.OPTMOD_URI, token=self.token) # 'https://everest-ru.distcomp.org'
         # self.ssop = everest.App(ssop_config.SSOP_ID, self.session)
         self.ssopApp = everest.App(appId, self.session)
         self.workdir = workdir

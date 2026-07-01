@@ -35,7 +35,7 @@ SSOP_ID = "vladimirv/SSOP" #"5bb2783e420000772e1049fd" "sol/psweep"
 
 
 # Add your Everest login and password here to make token update automatically
-SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/SvF/pyomo-everest/python-api/.token365d"
+SSOP_TOKEN_FILE = "/mnt/hgst2/ext4/git_work/python-api/.token360d" #"/mnt/hgst2/ext4/git_work/SvF/pyomo-everest/python-api/.token365d"
 # The command to update 30-days token:
 # python everest.py get-token -server_uri https://optmod.distcomp.org -u vladimirv -l ssop -t 2592000 | tee .token30d
 UPDATE_TOKEN_PERIOD_IN_SEC = 7*24*3600 - 5*3600
@@ -45,3 +45,5 @@ SSOP_DEFAULT_WORKING_DIR = "/mnt/hgst2/ext4/python_work/pyomo-everest/ssop/.demo
 
 # Run miscellaneous
 SSOP_RUN_SH_PREFIX = "run-" # run-ipopt.sh, run-scip.sh, run-fscip.sh ...
+
+OPTMOD_URI = "https://optmod.distcomp.org" # https://everest.distcomp.org

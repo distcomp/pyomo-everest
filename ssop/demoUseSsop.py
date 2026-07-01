@@ -65,13 +65,14 @@ def makeParser():
 def makeIpoptOptionsFile(workdir, optFileName):
     # see https://coin-or.github.io/Ipopt/OPTIONS.html
     with open(workdir + "/" + optFileName, 'w') as f:
-        f.write("linear_solver ma57\n")
+        f.write("linear_solver ma97\n")
         f.write("max_iter 10000\n")
         f.write("constr_viol_tol 0.0001\n")
         f.write("warm_start_init_point yes\n")
         f.write("warm_start_bound_push 1e-06\n")
         f.write("print_level 4\n")
         f.write("print_user_options yes\n")
+        f.write("xxx_yyy_zzz 99\n")
         f.close()
     return
 
@@ -145,8 +146,8 @@ if __name__ == "__main__":
     solver = args.solver
 
     bCube = binaryHypercube(3, type="-11")
-    resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] # vvvolDellDockerNew test-docker1 shark1vvv test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
-    resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] # test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
+    resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] #pool-scip-ipopt vvvolDellDockerNew test-docker1 shark1vvv test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
+    # resources_list = [ssop_config.SSOP_RESOURCES["shark1vvv"]] # test-pool-scip-ipopt['']] #["vvvolhome2"]] # ["ui4.kiae.vvvol"]] 'hse'
     theSession = SsopSession(name=args.problem, resources=resources_list, \
                              workdir=workdir, debug=False)
     # theSession = SsopSession(name=args.problem, resources=[ssop_config.SSOP_RESOURCES["ui4.kiae.vvvol"]], \
@@ -175,10 +176,10 @@ if __name__ == "__main__":
         optFile = 'ipopt.opt'
         # makeIpoptOptionsFile(workdir, optFile)
         makeSolverOptionsFile(workdir + "/" + optFile, solver="ipopt",  \
-                                         linear_solver="ma57", max_iter=10000, \
+                                         linear_solver="ma97", max_iter=10000, \
                                          constr_viol_tol=0.0001,
                                          warm_start_init_point="yes", warm_start_bound_push=1e-06, \
-                                         print_level=4, print_user_options="yes")
+                                         print_level=4, print_user_options="yes", xxx_yyy_zzz="")#, halt_on_ampl_error="", xxx_yyy_zzz="")
 
     # Solve all problems by SSOP
     if solver == "ipopt":
@@ -243,7 +244,7 @@ if __name__ == "__main__":
 
     # Delete jobs created to save disk space at Everest server , MAY BE
     if args.cleanjobs:
-        theSession.deleteAllJobsExceptLast(0)
+        theSession.deleteAllJobsExceptLast(1)
 
     # CLOSE THE SESSION !!! MUST BE
     theSession.session.close()
