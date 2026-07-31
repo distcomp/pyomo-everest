@@ -20,7 +20,7 @@ display/freq = 1000
 
 # solving stops, if the relative gap = |primal - dual|/MIN(|dual|,|primal|) is below the given value
 # [type: real, range: [0,1.79769313486232e+308], default: 0]
-limits/gap = .5e-01
+# limits/gap = .5e-01
 
 # verblevel of the nlp solver, can be 0 or 1
 # [type: int, range: [0,1], default: 0]
